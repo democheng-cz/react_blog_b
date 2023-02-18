@@ -1,11 +1,20 @@
 import React, { memo, useState } from "react"
 import { Button, Checkbox, Form, Input, message } from "antd"
+import { connect } from "react-redux"
+import { useNavigate } from "react-router-dom"
 
+import LoginPanelWrapper from "./style"
 import { reqLogin } from "@/service/login"
+import { SAVE_USERINFO } from "@/store/feature/login/CONSTANT"
+import { useAppDispatch } from "@/store"
+import dcCache from "@/utils/localstore"
+import { createSaveActiveMenu } from "@/store/feature/login/actions"
 
-const LoginPanel = memo(() => {
+const LoginPanel = memo((props: any) => {
 	const [checkCodeUrl, setCheckCodeUrl] = useState<string>("/api/checkCode")
 	const [messageApi, contextHolder] = message.useMessage()
+	const navigate = useNavigate()
+	const dispatch = useAppDispatch()
 	const getCheckCode = () => {
 		setCheckCodeUrl(`/api/checkCode?${new Date().getTime()}`)
 	}
@@ -18,11 +27,28 @@ const LoginPanel = memo(() => {
 	}
 
 	const onFinish = async (values: any) => {
-		const res = await reqLogin(values)
-		console.log("first")
+		const res: any = await reqLogin(values)
+		// console.log(res)
+		if (res.code === 200) {
+			props.saveUserInfo(res.data)
+			messageApi.open({
+				type: "success",
+				content: "登录成功",
+			})
+			dispatch(
+				createSaveActiveMenu({ selectKey: "blog/manage", openKey: ["blog"] })
+			)
+			navigate("/")
+		} else {
+			messageApi.open({
+				type: "error",
+				content: res.info,
+			})
+			setCheckCodeUrl(`/api/checkCode?${new Date().getTime()}`)
+		}
 	}
 	return (
-		<div>
+		<LoginPanelWrapper>
 			{contextHolder}
 			<Form
 				name="basic"
@@ -72,14 +98,24 @@ const LoginPanel = memo(() => {
 						<Button type="primary" htmlType="submit">
 							登录
 						</Button>
-						<Button type="primary" htmlType="submit">
-							注册
-						</Button>
 					</div>
 				</Form.Item>
 			</Form>
-		</div>
+		</LoginPanelWrapper>
 	)
 })
 
-export default LoginPanel
+const mapStateTopProps = (state: any) => {
+	return {
+		userInfo: state.userInfo,
+	}
+}
+const mapDispatchToProps = (dispatch: any) => {
+	return {
+		saveUserInfo: (payload: any) => {
+			dispatch({ type: SAVE_USERINFO, payload })
+		},
+	}
+}
+
+export default connect(mapStateTopProps, mapDispatchToProps)(LoginPanel)

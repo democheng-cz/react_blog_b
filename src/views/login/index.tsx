@@ -1,5 +1,4 @@
 import React, { memo } from "react"
-import { connect } from "react-redux"
 
 import { LoginWrapper } from "./style"
 import LoginPanel from "@/components/login-panel"
@@ -34,20 +33,4 @@ const Login: React.FC<any> = memo(props => {
 	)
 })
 
-const mapStateTopProps = (state: any) => {
-	return {
-		userInfo: state.userInfo,
-	}
-}
-const mapDispatchToProps = (dispatch: any) => {
-	return {
-		login: () => {
-			dispatch({ type: "login", payload: "zwc" })
-		},
-		logout: () => {
-			dispatch({ type: "logout", payload: "xyx" })
-		},
-	}
-}
-
-export default connect(mapStateTopProps, mapDispatchToProps)(Login)
+export default Login

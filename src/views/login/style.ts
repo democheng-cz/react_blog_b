@@ -9,7 +9,7 @@ export const LoginWrapper = styled.div`
 	background-image: url(${require("@/assets/images/login-bj.jpg")});
 	background-position: center center;
 	block-size: cover;
-	.form-wrapper {
+	/* .form-wrapper {
 		background-color: rgba(255, 255, 255, 0.5);
 		padding: 30px;
 		display: flex;
@@ -45,5 +45,5 @@ export const LoginWrapper = styled.div`
 				height: 30px;
 			}
 		}
-	}
+	} */
 `

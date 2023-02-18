@@ -1,6 +1,7 @@
 import React, { Suspense } from "react"
 import routes from "./router"
 import { useRoutes } from "react-router-dom"
+import dcCache from "@/utils/localstore"
 
 function App() {
 	return (

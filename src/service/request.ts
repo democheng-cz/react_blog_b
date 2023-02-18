@@ -50,4 +50,5 @@ class DcRequest {
 	}
 }
 
-export default new DcRequest()
+const request = new DcRequest()
+export default request
