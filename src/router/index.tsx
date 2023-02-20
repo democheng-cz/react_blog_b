@@ -6,11 +6,12 @@ const Login = lazy(() => import("@/views/login"))
 const Layout = lazy(() => import("@/views/Layout"))
 const BlogManage = lazy(() => import("@/views/blog/blog-manage"))
 const BlogCategory = lazy(() => import("@/views/blog/blog-category"))
+const UserManage = lazy(() => import("@/views/user/user-manage"))
+const UserRole = lazy(() => import("@/views/user/user-role"))
 const TopicManage = lazy(() => import("@/views/topic/topic-manage"))
 const SettingProfile = lazy(() => import("@/views/setting/setting-profile"))
 const SettingUser = lazy(() => import("@/views/setting/setting-user"))
 const SettingSystem = lazy(() => import("@/views/setting/setting-system"))
-const Recycle = lazy(() => import("@/views/recycle/recycle"))
 
 const routes: RouteObject[] = [
 	{
@@ -34,6 +35,14 @@ const routes: RouteObject[] = [
 				element: <BlogCategory />,
 			},
 			{
+				path: "user/manage",
+				element: <UserManage />,
+			},
+			{
+				path: "user/role",
+				element: <UserRole />,
+			},
+			{
 				path: "topic/manage",
 				element: <TopicManage />,
 			},
@@ -48,10 +57,6 @@ const routes: RouteObject[] = [
 			{
 				path: "/setting/system",
 				element: <SettingSystem />,
-			},
-			{
-				path: "/recycle/recycle",
-				element: <Recycle />,
 			},
 		],
 	},

@@ -1,109 +1,113 @@
 import React, { useEffect, useLayoutEffect, useState, Suspense } from "react"
 import {} from "@ant-design/icons"
 import { Layout, Menu } from "antd"
-import {
-	DiffFilled,
-	SlidersFilled,
-	SettingFilled,
-	DeleteFilled,
-} from "@ant-design/icons"
 import { Outlet } from "react-router-dom"
 import { ItemType } from "antd/es/menu/hooks/useItems"
-import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 
-import { useAppSelector, useAppDispatch } from "@/store"
-import { createSaveActiveMenu } from "@/store/feature/login/actions"
-import dcCache from "@/utils/localstore"
-
+import {
+	createSaveMenuList,
+	createSaveActiveMenu,
+} from "@/store/feature/login/actions"
 import LayoutHeader from "@/components/layout-header"
 import Auth from "@/components/auth/auth"
+import { useAppSelector, useAppDispatch } from "@/store"
+
+import dcCache from "@/utils/localstore"
+import DcMenu from "@/components/dc-menu"
 
 const { Content, Sider } = Layout
 
 const Container: React.FC = () => {
-	const menuList: ItemType[] = [
-		{
-			key: "blog",
-			label: "博客",
-			icon: <DiffFilled />,
-			children: [
-				{
-					key: "blog/manage",
-					label: "博客管理",
-				},
-				{
-					key: "blog/category",
-					label: "分类管理",
-				},
-			],
-		},
-		{
-			key: "topic",
-			label: "专题",
-			icon: <SlidersFilled />,
-			children: [
-				{
-					key: "topic/manage",
-					label: "专题管理",
-				},
-			],
-		},
-		{
-			key: "setting",
-			label: "设置",
-			icon: <SettingFilled />,
-			children: [
-				{
-					key: "setting/profile",
-					label: "个人信息设置",
-				},
-				{
-					key: "setting/user",
-					label: "博客成员",
-				},
-				{
-					key: "setting/system",
-					label: "系统设置",
-				},
-			],
-		},
-		{
-			key: "recycle",
-			label: "回收站",
-			icon: <DeleteFilled />,
-			children: [
-				{
-					key: "recycle/recycle",
-					label: "回收站",
-				},
-			],
-		},
-	]
-	const navigate = useNavigate()
-	const activeMenu = useAppSelector(state => {
-		return state.activeMenu
-	})
+	// const menuList: ItemType[] = [
+	// 	{
+	// 		key: "blog",
+	// 		label: "博客",
+	// 		icon: <DiffFilled />,
+	// 		children: [
+	// 			{
+	// 				key: "blog/manage",
+	// 				label: "博客管理",
+	// 			},
+	// 			{
+	// 				key: "blog/category",
+	// 				label: "分类管理",
+	// 			},
+	// 		],
+	// 	},
+	// 	{
+	// 		key: "topic",
+	// 		label: "专题",
+	// 		icon: <SlidersFilled />,
+	// 		children: [
+	// 			{
+	// 				key: "topic/manage",
+	// 				label: "专题管理",
+	// 			},
+	// 		],
+	// 	},
+	// 	{
+	// 		key: "setting",
+	// 		label: "设置",
+	// 		icon: <SettingFilled />,
+	// 		children: [
+	// 			{
+	// 				key: "setting/profile",
+	// 				label: "个人信息设置",
+	// 			},
+	// 			{
+	// 				key: "setting/user",
+	// 				label: "博客成员",
+	// 			},
+	// 			{
+	// 				key: "setting/system",
+	// 				label: "系统设置",
+	// 			},
+	// 		],
+	// 	},
+	// 	{
+	// 		key: "recycle",
+	// 		label: "回收站",
+	// 		icon: <DeleteFilled />,
+	// 		children: [
+	// 			{
+	// 				key: "recycle/recycle",
+	// 				label: "回收站",
+	// 			},
+	// 		],
+	// 	},
+	// ]
+
 	const dispatch = useAppDispatch()
 
-	const changeActiveMenu = (e: any) => {
-		// console.log(e.keyPath)
-		dispatch(createSaveActiveMenu({ ...activeMenu, selectKey: e.keyPath[0] }))
-		navigate(e.keyPath[0])
+	const { menuList, activeMenu } = useAppSelector(state => {
+		return {
+			menuList: state.menuList,
+			activeMenu: state.activeMenu,
+		}
+	})
+
+	const changeMenuItem = (e: any) => {
+		const arr = activeMenu.openKey
+		arr.push(e.keyPath[e.keyPath.length - 1])
+		let newArr = Array.from(new Set(arr))
+		dispatch(createSaveActiveMenu({ openKey: newArr, selectKey: e.keyPath[0] }))
 	}
-	const handleSelectMenu = (openKeys: any[]) => {
-		// console.log(openKeys)
+	const changeSelectItem = (openKeys: any) => {
+		// console.log("first")
 		dispatch(
 			createSaveActiveMenu({
-				...activeMenu,
-				openKey: [...openKeys],
+				...dcCache.getCache("activeMenu"),
+				openKey: openKeys,
 			})
 		)
-		// console.log(activeMenu)
 	}
 
 	useEffect(() => {
-		dispatch(createSaveActiveMenu(dcCache.getCache("activeMenu")))
+		menuList.length ||
+			dispatch(createSaveMenuList(dcCache.getCache("menuList")))
+		activeMenu.selectKey ||
+			dispatch(createSaveActiveMenu(dcCache.getCache("activeMenu")))
 	}, [])
 	return (
 		<LayoutWrapper>
@@ -111,16 +115,15 @@ const Container: React.FC = () => {
 				{/* 左侧菜单栏 */}
 				<Sider width={240}>
 					<h1 className="logo">easyBlog</h1>
-					<Menu
-						mode="inline"
-						defaultSelectedKeys={[activeMenu.selectKey]}
-						defaultOpenKeys={activeMenu.openKey}
-						style={{ height: "100%", borderRight: 0 }}
-						items={menuList}
-						onClick={e => changeActiveMenu(e)}
-						onOpenChange={e => handleSelectMenu(e)}
-						openKeys={activeMenu.openKey}
-						selectedKeys={[activeMenu.selectKey]}
+					<DcMenu
+						changeMenuItem={(e: any) => {
+							changeMenuItem(e)
+						}}
+						changeSelectItem={(openKeys: string[]) => {
+							changeSelectItem(openKeys)
+						}}
+						menuList={menuList}
+						activeMenu={activeMenu}
 					/>
 				</Sider>
 				{/* 右侧内容区 */}

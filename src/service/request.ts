@@ -1,16 +1,20 @@
 import axios from "axios"
 import type { AxiosInstance, AxiosResponse, AxiosRequestConfig } from "axios"
 
+import dcCache from "@/utils/localstore"
+
 class DcRequest {
 	instance: AxiosInstance
 	constructor() {
 		this.instance = axios.create({
-			baseURL: "",
+			baseURL: "/api",
 			timeout: 20000,
 		})
 
 		this.instance.interceptors.request.use(
 			(config: any) => {
+				const token = dcCache.getCache("token")
+				config.headers.authorization = token
 				return config
 			},
 			(err: any) => {

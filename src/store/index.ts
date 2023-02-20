@@ -1,10 +1,11 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux"
-import { createStore, compose } from "redux"
+import { createStore, compose, applyMiddleware } from "redux"
+import thunk from "redux-thunk"
 import loginReducer from "./feature/login/reducer"
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
-const store = createStore(loginReducer, composeEnhancer())
+const store = createStore(loginReducer, composeEnhancer(applyMiddleware(thunk)))
 
 //从store中推断出rootState类型
 export type RootStateType = ReturnType<typeof store.getState>

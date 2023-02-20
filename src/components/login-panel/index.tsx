@@ -1,25 +1,26 @@
 import React, { memo, useState } from "react"
 import { Button, Checkbox, Form, Input, message } from "antd"
-import { connect } from "react-redux"
+import { connect, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 
 import LoginPanelWrapper from "./style"
 import { reqLogin } from "@/service/login"
 import { SAVE_USERINFO } from "@/store/feature/login/CONSTANT"
 import { useAppDispatch } from "@/store"
-import dcCache from "@/utils/localstore"
-import { createSaveActiveMenu } from "@/store/feature/login/actions"
+import {
+	createSavaToken,
+	createSaveActiveMenu,
+	createSaveUserInfo,
+	getMenuList,
+} from "@/store/feature/login/actions"
 
 const LoginPanel = memo((props: any) => {
 	const [checkCodeUrl, setCheckCodeUrl] = useState<string>("/api/checkCode")
 	const [messageApi, contextHolder] = message.useMessage()
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
-	const getCheckCode = () => {
-		setCheckCodeUrl(`/api/checkCode?${new Date().getTime()}`)
-	}
+
 	const onFinishFailed = (errorInfo: any) => {
-		console.log("Failed:", errorInfo)
 		messageApi.open({
 			type: "error",
 			content: errorInfo.errorFields[0].errors,
@@ -28,23 +29,17 @@ const LoginPanel = memo((props: any) => {
 
 	const onFinish = async (values: any) => {
 		const res: any = await reqLogin(values)
-		// console.log(res)
-		if (res.code === 200) {
-			props.saveUserInfo(res.data)
-			messageApi.open({
-				type: "success",
-				content: "登录成功",
-			})
+		if (res.status === 200) {
+			props.getMenuList()
+			dispatch(createSaveUserInfo(res.result.data))
+			dispatch(createSavaToken(res.result.token))
 			dispatch(
-				createSaveActiveMenu({ selectKey: "blog/manage", openKey: ["blog"] })
+				createSaveActiveMenu({ selectKey: "/blog/manage", openKey: ["/blog"] })
 			)
+			message.success("登录成功")
 			navigate("/")
 		} else {
-			messageApi.open({
-				type: "error",
-				content: res.info,
-			})
-			setCheckCodeUrl(`/api/checkCode?${new Date().getTime()}`)
+			message.error(res.message)
 		}
 	}
 	return (
@@ -74,7 +69,7 @@ const LoginPanel = memo((props: any) => {
 					<Input.Password />
 				</Form.Item>
 
-				<Form.Item
+				{/* <Form.Item
 					name="checkCode"
 					rules={[{ required: true, message: "请输入验证码" }]}
 				>
@@ -88,7 +83,7 @@ const LoginPanel = memo((props: any) => {
 							alt=""
 						/>
 					</div>
-				</Form.Item>
+				</Form.Item> */}
 				<Form.Item name="checkbox" valuePropName="checked">
 					<Checkbox>记住我</Checkbox>
 				</Form.Item>
@@ -114,6 +109,9 @@ const mapDispatchToProps = (dispatch: any) => {
 	return {
 		saveUserInfo: (payload: any) => {
 			dispatch({ type: SAVE_USERINFO, payload })
+		},
+		getMenuList: (payload: any) => {
+			dispatch(getMenuList())
 		},
 	}
 }
