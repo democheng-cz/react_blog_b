@@ -16,7 +16,7 @@ const LayoutHeader = memo(() => {
 	const { Header } = Layout
 	const dispatch = useAppDispatch()
 	const userInfo = useAppSelector(state => {
-		return state.userInfo
+		return state.login.userInfo
 	})
 
 	const logout = () => {

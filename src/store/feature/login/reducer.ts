@@ -11,7 +11,7 @@ import dcCache from "@/utils/localstore"
 import reactCookies from "react-cookies"
 interface ActionType {
 	type: string
-	payload: any
+	payload?: any
 }
 interface UserinfoType {
 	userId?: number
@@ -34,7 +34,7 @@ interface InitStateType {
 const initState: InitStateType = {
 	userInfo: {},
 	activeMenu: {
-		openKey: [""],
+		openKey: [],
 		selectKey: "",
 	},
 	menuList: [],
@@ -63,10 +63,10 @@ const loginReducer = function (state = initState, action: ActionType) {
 				...state,
 			}
 		case SAVE_ACTIVE_MENU: {
-			// console.log(payload)
 			if (payload.openKey) {
 				dcCache.setCache("activeMenu", payload)
 			}
+			console.log(payload)
 			return {
 				...state,
 				activeMenu: payload,

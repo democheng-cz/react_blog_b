@@ -28,18 +28,25 @@ const LoginPanel = memo((props: any) => {
 	}
 
 	const onFinish = async (values: any) => {
-		const res: any = await reqLogin(values)
-		if (res.status === 200) {
-			props.getMenuList()
-			dispatch(createSaveUserInfo(res.result.data))
-			dispatch(createSavaToken(res.result.token))
-			dispatch(
-				createSaveActiveMenu({ selectKey: "/blog/manage", openKey: ["/blog"] })
-			)
-			message.success("登录成功")
-			navigate("/")
-		} else {
-			message.error(res.message)
+		console.log(values)
+		try {
+			const res: any = await reqLogin(values)
+			console.log(res)
+			if (res.status === 200) {
+				props.getMenuList()
+				dispatch(createSaveUserInfo(res.result.data))
+				dispatch(createSavaToken(res.result.token))
+				dispatch(
+					createSaveActiveMenu({
+						selectKey: "/blog/manage",
+						openKey: ["/blog"],
+					})
+				)
+				message.success("登录成功")
+				navigate("/")
+			}
+		} catch (error) {
+			console.log(error)
 		}
 	}
 	return (
@@ -84,9 +91,9 @@ const LoginPanel = memo((props: any) => {
 						/>
 					</div>
 				</Form.Item> */}
-				<Form.Item name="checkbox" valuePropName="checked">
+				{/* <Form.Item name="checkbox" valuePropName="checked">
 					<Checkbox>记住我</Checkbox>
-				</Form.Item>
+				</Form.Item> */}
 
 				<Form.Item className="btn">
 					<div className="btns">

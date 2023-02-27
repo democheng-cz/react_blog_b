@@ -82,13 +82,13 @@ const Container: React.FC = () => {
 
 	const { menuList, activeMenu } = useAppSelector(state => {
 		return {
-			menuList: state.menuList,
-			activeMenu: state.activeMenu,
+			menuList: state.login.menuList,
+			activeMenu: state.login.activeMenu,
 		}
 	})
 
 	const changeMenuItem = (e: any) => {
-		const arr = activeMenu.openKey
+		const arr = [...activeMenu.openKey]
 		arr.push(e.keyPath[e.keyPath.length - 1])
 		let newArr = Array.from(new Set(arr))
 		dispatch(createSaveActiveMenu({ openKey: newArr, selectKey: e.keyPath[0] }))
@@ -113,7 +113,7 @@ const Container: React.FC = () => {
 		<LayoutWrapper>
 			<Layout>
 				{/* 左侧菜单栏 */}
-				<Sider width={240}>
+				<Sider width={240} style={{ height: "100%", overflow: "hidden" }}>
 					<h1 className="logo">easyBlog</h1>
 					<DcMenu
 						changeMenuItem={(e: any) => {
@@ -130,7 +130,10 @@ const Container: React.FC = () => {
 				<Layout>
 					{/* 头部 */}
 					<LayoutHeader />
-					<Layout style={{ padding: "15px" }}>
+					<Layout
+						style={{ padding: "15px", backgroundColor: "#fff" }}
+						className="layout-main"
+					>
 						{/* 内如区 */}
 						<Content
 							style={{

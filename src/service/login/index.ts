@@ -6,9 +6,9 @@ interface LoginType {
 }
 
 // 获取验证码图片
-export const reqCheckCode = () => {
-	return request.post({ url: `/api/checkCode?${new Date().getTime()}` })
-}
+// export const reqCheckCode = () => {
+// 	return request.post({ url: `/api/checkCode?${new Date().getTime()}` })
+// }
 
 // 登录
 export const reqLogin = (loginInfo: LoginType) => {

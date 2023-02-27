@@ -8,6 +8,7 @@ const BlogManage = lazy(() => import("@/views/blog/blog-manage"))
 const BlogCategory = lazy(() => import("@/views/blog/blog-category"))
 const UserManage = lazy(() => import("@/views/user/user-manage"))
 const UserRole = lazy(() => import("@/views/user/user-role"))
+const BlogDetail = lazy(() => import("@/views/blog-detail"))
 const TopicManage = lazy(() => import("@/views/topic/topic-manage"))
 const SettingProfile = lazy(() => import("@/views/setting/setting-profile"))
 const SettingUser = lazy(() => import("@/views/setting/setting-user"))
@@ -29,6 +30,10 @@ const routes: RouteObject[] = [
 			{
 				path: "blog/manage",
 				element: <BlogManage />,
+			},
+			{
+				path: "blog/:id",
+				element: <BlogDetail />,
 			},
 			{
 				path: "blog/category",

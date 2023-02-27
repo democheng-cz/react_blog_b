@@ -14,7 +14,11 @@ class DcRequest {
 		this.instance.interceptors.request.use(
 			(config: any) => {
 				const token = dcCache.getCache("token")
+				const type = config.params?.type
 				config.headers.authorization = token
+				if (type === "cover" || type === "avatar") {
+					config.headers["Content-Type"] = "multipart/form-data"
+				}
 				return config
 			},
 			(err: any) => {

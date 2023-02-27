@@ -6,6 +6,7 @@ declare interface Window {
 
 declare module "react-cookies"
 
+declare module "dom-to-image"
 // declare module "react-router-dom" {
 // 	export interface RouteObject {}
 // }
