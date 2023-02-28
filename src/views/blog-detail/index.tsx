@@ -1,13 +1,43 @@
-import React, { memo } from "react"
+import React, { memo, useEffect } from "react"
+import { useParams } from "react-router-dom"
 
 import MDEditor from "@uiw/react-md-editor"
 
 import { BlogDetailWrapper } from "./style"
+import { useAppDispatch, useAppSelector } from "@/store"
+import { fetchBlogDetail } from "@/store/feature/blog/reducer"
 
 const BlogDetail = memo(() => {
+	const dispatch = useAppDispatch()
+	const params = useParams()
+	const blogDetail = useAppSelector(state => {
+		return state.blog.blogDetail
+	})
+	const { id } = params
+
+	useEffect(() => {
+		dispatch(fetchBlogDetail(id!))
+	}, [id])
 	return (
 		<BlogDetailWrapper>
-			<MDEditor.Markdown source="Hello Markdown!" />
+			<div className="header">
+				<div className="title">
+					<h1>{blogDetail.title}</h1>
+				</div>
+				<div className="info">
+					<div className="user">
+						<span className="text">作者:</span>
+						<span>{blogDetail.user_name}</span>
+					</div>
+					<div className="time">
+						<span className="text">最近修改时间:</span>
+						<span>{blogDetail.update_time}</span>
+					</div>
+				</div>
+			</div>
+			<div className="md">
+				<MDEditor.Markdown source={blogDetail.content} />
+			</div>
 		</BlogDetailWrapper>
 	)
 })

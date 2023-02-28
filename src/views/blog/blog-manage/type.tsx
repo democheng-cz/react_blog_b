@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom"
 import { Button, Space } from "antd"
 import type { ColumnsType } from "antd/es/table"
+import { useAppDispatch } from "@/store"
+import { fetchBlogDetail } from "@/store/feature/blog/reducer"
 
 interface BlogTableType {
 	key: string
@@ -19,6 +21,12 @@ interface BlogTableType {
 
 export const TableColumns = () => {
 	const navigate = useNavigate()
+	const dispatch = useAppDispatch()
+	const handleToBlogDetail = (record: any) => {
+		dispatch(fetchBlogDetail(record.blog_id))
+		navigate(`/blog/${record.blog_id}`)
+	}
+
 	const PageTableColumns: ColumnsType<BlogTableType> = [
 		{
 			title: "封面",
@@ -39,7 +47,7 @@ export const TableColumns = () => {
 			render: (text, record) => {
 				return (
 					<div style={{ fontSize: "13px", cursor: "pointer" }}>
-						<div onClick={() => navigate(`/blog/${record.blog_id}`)}>
+						<div onClick={() => handleToBlogDetail(record)}>
 							标题: <span style={{ color: "#0077aa" }}>{record.title}</span>
 						</div>
 						<div>

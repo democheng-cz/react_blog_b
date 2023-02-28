@@ -37,3 +37,8 @@ export const reqUploadBlog = (blogInfo: any) => {
 		data: blogInfo,
 	})
 }
+
+// 通过blog_id获取博客详情
+export const reqBlogDetail = (blog_id: string) => {
+	return request.get({ url: `/blog/${blog_id}` })
+}
