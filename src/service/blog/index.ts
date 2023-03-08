@@ -42,3 +42,8 @@ export const reqUploadBlog = (blogInfo: any) => {
 export const reqBlogDetail = (blog_id: string) => {
 	return request.get({ url: `/blog/${blog_id}` })
 }
+
+// 根据blog_id删除博客
+export const reqDeleteBlog = (blog_id: string) => {
+	return request.delete({ url: `/blog/${blog_id}` })
+}

@@ -1,4 +1,4 @@
-import React, { memo } from "react"
+import React, { memo, useState, useEffect } from "react"
 
 import { Table, Tag, Space } from "antd"
 import type { PaginationProps } from "antd/es/pagination"
@@ -10,10 +10,22 @@ interface PageTablePropsType {
 	data: any[]
 	rowKey?: string | ((record: any) => string)
 	pagination: PaginationProps
+	isLoading: boolean
 }
 
 const PageTable: React.FC<PageTablePropsType> = memo(props => {
 	const { columns, data, rowKey, pagination } = props
+	let [isLoading, setIsLoading] = useState(false)
+	useEffect(() => {
+		let timer = setTimeout(() => {
+			if (!data.length) {
+				setIsLoading(false)
+			}
+		}, 5000)
+		return () => {
+			clearTimeout(timer)
+		}
+	}, [])
 	return (
 		<PageTableWrapper>
 			<Table
@@ -21,8 +33,7 @@ const PageTable: React.FC<PageTablePropsType> = memo(props => {
 				dataSource={data}
 				rowKey={rowKey}
 				pagination={pagination}
-				// scroll={{ y: 600 }}
-				// style={{ width: "100%" }}
+				loading={isLoading}
 			/>
 		</PageTableWrapper>
 	)

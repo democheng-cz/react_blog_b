@@ -1,8 +1,11 @@
 import { useNavigate } from "react-router-dom"
-import { Button, Space } from "antd"
+import type { ReactNode } from "react"
+import { Button, Space, Popconfirm } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import { useAppDispatch } from "@/store"
-import { fetchBlogDetail } from "@/store/feature/blog/reducer"
+import { fetchBlogDetail, fetchBlogList } from "@/store/feature/blog/reducer"
+import { timeFormat } from "@/utils/timeFormat"
+import { reqDeleteBlog } from "@/service/blog"
 
 interface BlogTableType {
 	key: string
@@ -25,6 +28,14 @@ export const TableColumns = () => {
 	const handleToBlogDetail = (record: any) => {
 		dispatch(fetchBlogDetail(record.blog_id))
 		navigate(`/blog/${record.blog_id}`)
+	}
+
+	// 确定删除删除
+	const confirm = async (record: any) => {
+		// console.log(record.blog_id)
+		const res = await reqDeleteBlog(record.blog_id)
+		dispatch(fetchBlogList(null))
+		console.log(res)
 	}
 
 	const PageTableColumns: ColumnsType<BlogTableType> = [
@@ -84,8 +95,8 @@ export const TableColumns = () => {
 			render: (_, record) => {
 				return (
 					<Space style={{ display: "flex", flexDirection: "column" }}>
-						<div>{record["create_time"]}</div>
-						<div>{record["update_time"]}</div>
+						<div>{timeFormat(record["create_time"]) as ReactNode}</div>
+						<div>{timeFormat(record["update_time"])}</div>
 					</Space>
 				)
 			},
@@ -99,9 +110,17 @@ export const TableColumns = () => {
 					<Button size={"small"} type={"primary"}>
 						修改
 					</Button>
-					<Button size={"small"} danger type={"primary"}>
-						删除
-					</Button>
+
+					<Popconfirm
+						title="确认删除吗?"
+						onConfirm={() => confirm(record)}
+						okText="确定"
+						cancelText="取消"
+					>
+						<Button size={"small"} danger type={"primary"}>
+							删除
+						</Button>
+					</Popconfirm>
 				</Space>
 			),
 		},

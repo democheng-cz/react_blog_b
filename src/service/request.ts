@@ -56,6 +56,10 @@ class DcRequest {
 	post<T>(config: AxiosRequestConfig) {
 		return this.request<T>({ ...config, method: "POST" })
 	}
+
+	delete<T>(config: AxiosRequestConfig) {
+		return this.instance<T>({ ...config, method: "DELETE" })
+	}
 }
 
 const request = new DcRequest()

@@ -143,7 +143,7 @@ const Container: React.FC = () => {
 								background: "#fff",
 							}}
 						>
-							<Suspense fallback="我是layout">
+							<Suspense fallback="......">
 								<Auth>
 									<Outlet />
 								</Auth>

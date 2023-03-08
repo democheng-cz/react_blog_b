@@ -6,6 +6,7 @@ import MDEditor from "@uiw/react-md-editor"
 import { BlogDetailWrapper } from "./style"
 import { useAppDispatch, useAppSelector } from "@/store"
 import { fetchBlogDetail } from "@/store/feature/blog/reducer"
+import { timeFormat } from "@/utils/timeFormat"
 
 const BlogDetail = memo(() => {
 	const dispatch = useAppDispatch()
@@ -31,7 +32,7 @@ const BlogDetail = memo(() => {
 					</div>
 					<div className="time">
 						<span className="text">最近修改时间:</span>
-						<span>{blogDetail.update_time}</span>
+						<span>{timeFormat(blogDetail.update_time)}</span>
 					</div>
 				</div>
 			</div>

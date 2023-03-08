@@ -58,6 +58,7 @@ const BlogManage = memo(() => {
 					data={blogList}
 					rowKey={record => record.blog_id}
 					pagination={paginationProps}
+					isLoading={true}
 				/>
 			</div>
 		</BlogManageWrapper>
