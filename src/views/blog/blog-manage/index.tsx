@@ -1,13 +1,20 @@
-import React, { memo, useEffect } from "react"
+import React, { memo, useEffect, useState } from "react"
 
 import { Button } from "antd"
 
 import { BlogManageWrapper } from "./style"
 import PageSearch from "@/components/page-search"
 import PageTable from "@/components/page-table"
-import { TableColumns } from "./type"
+import { TableColumns } from "./table"
 import { useAppDispatch, useAppSelector } from "@/store"
 import { fetchBlogCategory, fetchBlogList } from "@/store/feature/blog/reducer"
+import { blogManageConfig } from "./type"
+
+interface FormDataType {
+	title: string
+	status: number
+	category_id: string
+}
 
 const BlogManage = memo(() => {
 	const dispatch = useAppDispatch()
@@ -18,10 +25,18 @@ const BlogManage = memo(() => {
 			blogCategory: state.blog.blogCategory,
 		}
 	})
+
+	const [formData, setFormData] = useState<FormDataType>({
+		title: "",
+		status: 0,
+		category_id: "",
+	})
+
 	useEffect(() => {
 		dispatch(fetchBlogList({}))
 		dispatch(fetchBlogCategory())
 	}, [])
+
 	const handleFilter = (query: any) => {
 		dispatch(fetchBlogList(query))
 	}
@@ -40,11 +55,13 @@ const BlogManage = memo(() => {
 		<BlogManageWrapper>
 			<div className="search">
 				<PageSearch
-					type="show"
+					formConfig={blogManageConfig}
 					handleSubmit={(query: any) => handleFilter(query)}
 					selectData={blogCategory.map((item: any) => {
 						return { label: item.category_name, value: item.category_id }
 					})}
+					formData={formData}
+					setFormData={setFormData}
 				/>
 			</div>
 			<div className="add" style={{ margin: "15px 0" }}>
