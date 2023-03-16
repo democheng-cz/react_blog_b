@@ -5,6 +5,7 @@ import { HashRouter, BrowserRouter } from "react-router-dom"
 
 import App from "./App"
 import store from "./store"
+import Auth from "./components/auth/auth"
 import "normalize.css"
 import "@/assets/less/reset.less"
 

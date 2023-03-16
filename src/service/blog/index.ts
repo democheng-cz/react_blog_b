@@ -15,7 +15,7 @@ interface InitQueryType {
 	pageNum?: number
 }
 export const reqBlogList = (query: InitQueryType) => {
-	console.log("first")
+	// console.log("first")
 	return request.get<ResType>({
 		url: "/blog",
 		params: { ...query },

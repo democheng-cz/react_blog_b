@@ -1,6 +1,6 @@
 import React, { memo, useState, useEffect } from "react"
 
-import { Table, Tag, Space } from "antd"
+import { Table } from "antd"
 import type { PaginationProps } from "antd/es/pagination"
 import type { ColumnsType } from "antd/es/table"
 import { PageTableWrapper } from "./style"

@@ -9,6 +9,13 @@ interface InitialStateType {
 	pageSize: number
 	blogCategory: any[]
 	blogDetail: any
+	currentBlogFormData: {
+		content?: string
+		title?: string
+		status?: number
+		category_id?: string
+		cover?: string
+	}
 }
 const initialState: InitialStateType = {
 	blogList: [],
@@ -16,6 +23,7 @@ const initialState: InitialStateType = {
 	pageSize: 10,
 	blogCategory: [],
 	blogDetail: {},
+	currentBlogFormData: {},
 }
 
 // 异步action
@@ -33,7 +41,7 @@ export const fetchBlogCategory = createAsyncThunk(
 	"blog/fetchBlogCategory",
 	async (payload, { dispatch }) => {
 		const res: any = await reqBlogCategoryList()
-		console.log(res)
+		// console.log(res)
 		return res.result
 	}
 )
@@ -50,13 +58,16 @@ export const fetchBlogDetail = createAsyncThunk(
 	}
 )
 
-console.log(fetchBlogList)
 const blogReducer = createSlice({
 	name: "blog",
 	initialState: initialState,
 	reducers: {
 		getBlogList(state: any, action: PayloadAction<any[]>) {
 			state.blogList = action.payload
+		},
+		//获取当前的要修改的blog信息
+		updateCurrentBlogFormData(state, action: PayloadAction<{}>) {
+			state.currentBlogFormData = action.payload
 		},
 	},
 	extraReducers: builder => {
@@ -79,5 +90,5 @@ const blogReducer = createSlice({
 	},
 })
 
-export const { getBlogList } = blogReducer.actions
+export const { getBlogList, updateCurrentBlogFormData } = blogReducer.actions
 export default blogReducer.reducer

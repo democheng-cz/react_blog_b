@@ -5,7 +5,7 @@ import { lazy } from "react"
 const Login = lazy(() => import("@/views/login"))
 const Layout = lazy(() => import("@/views/Layout"))
 const BlogManage = lazy(() => import("@/views/blog/blog-manage"))
-const BlogCategory = lazy(() => import("@/views/blog/blog-category"))
+const BlogEdit = lazy(() => import("@/views/blog/blog-edit"))
 const UserManage = lazy(() => import("@/views/user/user-manage"))
 const UserRole = lazy(() => import("@/views/user/user-role"))
 const BlogDetail = lazy(() => import("@/views/blog-detail"))
@@ -36,8 +36,8 @@ const routes: RouteObject[] = [
 				element: <BlogDetail />,
 			},
 			{
-				path: "blog/category",
-				element: <BlogCategory />,
+				path: "blog/edit",
+				element: <BlogEdit />,
 			},
 			{
 				path: "user/manage",
@@ -46,22 +46,6 @@ const routes: RouteObject[] = [
 			{
 				path: "user/role",
 				element: <UserRole />,
-			},
-			{
-				path: "topic/manage",
-				element: <TopicManage />,
-			},
-			{
-				path: "setting/profile",
-				element: <SettingProfile />,
-			},
-			{
-				path: "setting/user",
-				element: <SettingUser />,
-			},
-			{
-				path: "/setting/system",
-				element: <SettingSystem />,
 			},
 		],
 	},

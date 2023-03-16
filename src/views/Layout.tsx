@@ -1,7 +1,12 @@
 import React, { useEffect, useLayoutEffect, useState, Suspense } from "react"
 import {} from "@ant-design/icons"
 import { Layout, Menu } from "antd"
-import { Outlet } from "react-router-dom"
+import {
+	Outlet,
+	useLocation,
+	useParams,
+	useSearchParams,
+} from "react-router-dom"
 import { ItemType } from "antd/es/menu/hooks/useItems"
 import styled from "styled-components"
 
@@ -19,66 +24,9 @@ import DcMenu from "@/components/dc-menu"
 const { Content, Sider } = Layout
 
 const Container: React.FC = () => {
-	// const menuList: ItemType[] = [
-	// 	{
-	// 		key: "blog",
-	// 		label: "博客",
-	// 		icon: <DiffFilled />,
-	// 		children: [
-	// 			{
-	// 				key: "blog/manage",
-	// 				label: "博客管理",
-	// 			},
-	// 			{
-	// 				key: "blog/category",
-	// 				label: "分类管理",
-	// 			},
-	// 		],
-	// 	},
-	// 	{
-	// 		key: "topic",
-	// 		label: "专题",
-	// 		icon: <SlidersFilled />,
-	// 		children: [
-	// 			{
-	// 				key: "topic/manage",
-	// 				label: "专题管理",
-	// 			},
-	// 		],
-	// 	},
-	// 	{
-	// 		key: "setting",
-	// 		label: "设置",
-	// 		icon: <SettingFilled />,
-	// 		children: [
-	// 			{
-	// 				key: "setting/profile",
-	// 				label: "个人信息设置",
-	// 			},
-	// 			{
-	// 				key: "setting/user",
-	// 				label: "博客成员",
-	// 			},
-	// 			{
-	// 				key: "setting/system",
-	// 				label: "系统设置",
-	// 			},
-	// 		],
-	// 	},
-	// 	{
-	// 		key: "recycle",
-	// 		label: "回收站",
-	// 		icon: <DeleteFilled />,
-	// 		children: [
-	// 			{
-	// 				key: "recycle/recycle",
-	// 				label: "回收站",
-	// 			},
-	// 		],
-	// 	},
-	// ]
-
 	const dispatch = useAppDispatch()
+
+	const location = useLocation()
 
 	const { menuList, activeMenu } = useAppSelector(state => {
 		return {
@@ -94,7 +42,6 @@ const Container: React.FC = () => {
 		dispatch(createSaveActiveMenu({ openKey: newArr, selectKey: e.keyPath[0] }))
 	}
 	const changeSelectItem = (openKeys: any) => {
-		// console.log("first")
 		dispatch(
 			createSaveActiveMenu({
 				...dcCache.getCache("activeMenu"),
@@ -102,57 +49,59 @@ const Container: React.FC = () => {
 			})
 		)
 	}
-
 	useEffect(() => {
-		menuList.length ||
-			dispatch(createSaveMenuList(dcCache.getCache("menuList")))
-		activeMenu.selectKey ||
-			dispatch(createSaveActiveMenu(dcCache.getCache("activeMenu")))
+		dispatch(createSaveMenuList(dcCache.getCache("menuList")))
 	}, [])
+	useEffect(() => {
+		const selectKey = location.pathname
+		const openKey = "/" + location.pathname.split("/")[1]
+		dispatch(createSaveActiveMenu({ selectKey, openKey: [openKey] }))
+	}, [location])
+
 	return (
-		<LayoutWrapper>
-			<Layout>
-				{/* 左侧菜单栏 */}
-				<Sider width={240} style={{ height: "100%", overflow: "hidden" }}>
-					<h1 className="logo">easyBlog</h1>
-					<DcMenu
-						changeMenuItem={(e: any) => {
-							changeMenuItem(e)
-						}}
-						changeSelectItem={(openKeys: string[]) => {
-							changeSelectItem(openKeys)
-						}}
-						menuList={menuList}
-						activeMenu={activeMenu}
-					/>
-				</Sider>
-				{/* 右侧内容区 */}
+		<Auth>
+			<LayoutWrapper>
 				<Layout>
-					{/* 头部 */}
-					<LayoutHeader />
-					<Layout
-						style={{ padding: "15px", backgroundColor: "#fff" }}
-						className="layout-main"
-					>
-						{/* 内如区 */}
-						<Content
-							style={{
-								padding: 24,
-								margin: 0,
-								minHeight: 280,
-								background: "#fff",
+					{/* 左侧菜单栏 */}
+					<Sider width={240} style={{ height: "100%", overflow: "hidden" }}>
+						<h1 className="logo">easyBlog</h1>
+						<DcMenu
+							changeMenuItem={(e: any) => {
+								changeMenuItem(e)
 							}}
+							changeSelectItem={(openKeys: string[]) => {
+								changeSelectItem(openKeys)
+							}}
+							menuList={menuList}
+							activeMenu={activeMenu.select || dcCache.getCache("activeMenu")}
+						/>
+					</Sider>
+					{/* 右侧内容区 */}
+					<Layout>
+						{/* 头部 */}
+						<LayoutHeader />
+						<Layout
+							style={{ padding: "15px", backgroundColor: "#fff" }}
+							className="layout-main"
 						>
-							<Suspense fallback="......">
-								<Auth>
+							{/* 内如区 */}
+							<Content
+								style={{
+									padding: 24,
+									margin: 0,
+									minHeight: 280,
+									background: "#fff",
+								}}
+							>
+								<Suspense fallback="......">
 									<Outlet />
-								</Auth>
-							</Suspense>
-						</Content>
+								</Suspense>
+							</Content>
+						</Layout>
 					</Layout>
 				</Layout>
-			</Layout>
-		</LayoutWrapper>
+			</LayoutWrapper>
+		</Auth>
 	)
 }
 

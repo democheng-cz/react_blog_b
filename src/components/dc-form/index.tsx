@@ -1,6 +1,6 @@
 import React, { memo, useState, useCallback } from "react"
 
-import { Form, Input, Select, Button, Upload, message } from "antd"
+import { Form, Input, Select, Button, Upload, message, Image } from "antd"
 import { UploadOutlined } from "@ant-design/icons"
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface"
 import rehypeSanitize from "rehype-sanitize"
@@ -32,42 +32,47 @@ const DcForm: React.FC<FormType> = memo(props => {
 		formData,
 		setFormData,
 	} = props
-
 	const [fileList, setFileList] = useState<UploadFile[]>([])
 
-	const renderFormItem = useCallback(
-		function renderFormItem(item: any) {
-			switch (item.type) {
-				case "input":
-					return (
-						<Input
-							value={formData[item.name]}
-							onChange={e => handleChange(e, item.name, item.type)}
-						/>
-					)
-				case "select":
-					return (
+	const renderFormItem = function renderFormItem(item: any) {
+		switch (item.type) {
+			case "input":
+				return (
+					<Input
+						value={formData[item.name]}
+						onChange={e => handleChange(e, item.name, item.type)}
+					/>
+				)
+			case "select":
+				return (
+					<>
 						<Select
 							options={item.label === "状态" ? statusOptions : selectData}
 							onChange={e => {
 								handleChange(e, item.name, item.type)
 							}}
+							defaultValue={formData[item.name]}
 						></Select>
-					)
-				case "upload":
-					return (
+					</>
+				)
+			case "upload":
+				return (
+					<>
+						{formData[item.name] ? (
+							<Image width={200} src={formData[item.name]} />
+						) : (
+							""
+						)}
 						<Upload
 							fileList={fileList}
 							customRequest={(files: any) => handleCustomRequest(files)}
 						>
 							<Button icon={<UploadOutlined />}>Select File</Button>
 						</Upload>
-					)
-			}
-		},
-		[formData]
-	)
-
+					</>
+				)
+		}
+	}
 	const handleCustomRequest = async (file: any) => {
 		const formData = new FormData()
 		formData.append("cover", file.file as RcFile)

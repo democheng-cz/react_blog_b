@@ -28,7 +28,7 @@ const LoginPanel = memo((props: any) => {
 	}
 
 	const onFinish = async (values: any) => {
-		console.log(values)
+		// console.log(values)
 		try {
 			const res: any = await reqLogin(values)
 			console.log(res)
@@ -43,7 +43,7 @@ const LoginPanel = memo((props: any) => {
 					})
 				)
 				message.success("登录成功")
-				navigate("/")
+				navigate("/blog/manage")
 			}
 		} catch (error) {
 			console.log(error)

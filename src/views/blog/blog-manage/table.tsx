@@ -1,9 +1,13 @@
 import { useNavigate } from "react-router-dom"
 import type { ReactNode } from "react"
-import { Button, Space, Popconfirm } from "antd"
+import { Button, Space, Popconfirm, message } from "antd"
 import type { ColumnsType } from "antd/es/table"
-import { useAppDispatch } from "@/store"
-import { fetchBlogDetail, fetchBlogList } from "@/store/feature/blog/reducer"
+import { useAppDispatch, useAppSelector } from "@/store"
+import {
+	fetchBlogDetail,
+	fetchBlogList,
+	updateCurrentBlogFormData,
+} from "@/store/feature/blog/reducer"
 import { timeFormat } from "@/utils/timeFormat"
 import { reqDeleteBlog } from "@/service/blog"
 
@@ -20,22 +24,41 @@ interface BlogTableType {
 	user_name: string
 	desc: string
 	category_name: string
+	category_id: number
+	content: string
 }
 
-export const TableColumns = () => {
+export const TableColumns = (setFormData: (val: any) => void) => {
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
-	const handleToBlogDetail = (record: any) => {
+	const { category } = useAppSelector(state => {
+		return {
+			category: state.blog.blogCategory,
+		}
+	})
+
+	// 进入博客详情
+	const handleToBlogDetail = (record: BlogTableType) => {
 		dispatch(fetchBlogDetail(record.blog_id))
 		navigate(`/blog/${record.blog_id}`)
 	}
 
+	// 修改博客信息
+	const updateBLogInfo = (record: BlogTableType) => {
+		const { title, status, content, category_id, cover } = record
+		dispatch(
+			updateCurrentBlogFormData({ title, status, content, category_id, cover })
+		)
+		navigate("/blog/edit")
+	}
+
 	// 确定删除删除
 	const confirm = async (record: any) => {
-		// console.log(record.blog_id)
 		const res = await reqDeleteBlog(record.blog_id)
+		if (res.status === 200) {
+			message.success("删除成功")
+		}
 		dispatch(fetchBlogList(null))
-		console.log(res)
 	}
 
 	const PageTableColumns: ColumnsType<BlogTableType> = [
@@ -62,9 +85,13 @@ export const TableColumns = () => {
 							标题: <span style={{ color: "#0077aa" }}>{record.title}</span>
 						</div>
 						<div>
-							分类:{" "}
+							分类:
 							<span style={{ color: "#0077aa" }}>
-								{record.category_name || "vue3"}
+								{category.map((item: any) => {
+									return item.category_id === record.category_id
+										? item.category_name
+										: ""
+								})}
 							</span>
 						</div>
 						<div>
@@ -105,9 +132,15 @@ export const TableColumns = () => {
 			title: "操作",
 			width: "20%",
 			align: "center",
-			render: (text: any, record: any) => (
+			render: (text: any, record) => (
 				<Space size="middle">
-					<Button size={"small"} type={"primary"}>
+					<Button
+						size={"small"}
+						type={"primary"}
+						onClick={() => {
+							updateBLogInfo(record)
+						}}
+					>
 						修改
 					</Button>
 

@@ -66,7 +66,6 @@ const loginReducer = function (state = initState, action: ActionType) {
 			if (payload.openKey) {
 				dcCache.setCache("activeMenu", payload)
 			}
-			console.log(payload)
 			return {
 				...state,
 				activeMenu: payload,

@@ -12,7 +12,7 @@ import { blogManageConfig } from "./type"
 
 interface FormDataType {
 	title: string
-	status: number
+	status: number | null
 	category_id: string
 }
 
@@ -28,7 +28,7 @@ const BlogManage = memo(() => {
 
 	const [formData, setFormData] = useState<FormDataType>({
 		title: "",
-		status: 0,
+		status: null,
 		category_id: "",
 	})
 
@@ -71,7 +71,7 @@ const BlogManage = memo(() => {
 			{/* blog列表数据 */}
 			<div className="table">
 				<PageTable
-					columns={TableColumns()}
+					columns={TableColumns(setFormData)}
 					data={blogList}
 					rowKey={record => record.blog_id}
 					pagination={paginationProps}

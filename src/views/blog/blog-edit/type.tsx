@@ -6,7 +6,7 @@ export const blogCategoryConfig = {
 	statusOptions: [
 		{
 			label: "已发布",
-			value: "1",
+			value: 1,
 		},
 		{
 			label: "未发布",
