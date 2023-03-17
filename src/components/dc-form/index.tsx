@@ -1,4 +1,4 @@
-import React, { memo, useState, useCallback } from "react"
+import React, { memo, useState, useCallback, useRef } from "react"
 
 import { Form, Input, Select, Button, Upload, message, Image } from "antd"
 import { UploadOutlined } from "@ant-design/icons"
@@ -17,7 +17,7 @@ import { DcFormWrapper } from "./style"
 interface FormType {
 	formConfig: any
 	selectData?: any[]
-	submit: (query: any) => void
+	submit?: (query: any) => void
 	fieldsChange?: (newValue: any[]) => void
 	customRequest?: (file: any) => void
 	formData: any
@@ -25,6 +25,8 @@ interface FormType {
 }
 
 const DcForm: React.FC<FormType> = memo(props => {
+	const selectRef = useRef<any>(null)
+
 	const {
 		formConfig: { type, statusOptions, formItems },
 		selectData,
@@ -52,6 +54,11 @@ const DcForm: React.FC<FormType> = memo(props => {
 								handleChange(e, item.name, item.type)
 							}}
 							defaultValue={formData[item.name]}
+							allowClear={true}
+							ref={selectRef}
+							onClear={() => {
+								console.log("first")
+							}}
 						></Select>
 					</>
 				)
@@ -67,8 +74,36 @@ const DcForm: React.FC<FormType> = memo(props => {
 							fileList={fileList}
 							customRequest={(files: any) => handleCustomRequest(files)}
 						>
-							<Button icon={<UploadOutlined />}>Select File</Button>
+							<Button icon={<UploadOutlined />}>请选择上传文件</Button>
 						</Upload>
+					</>
+				)
+			case "btns":
+				return (
+					<>
+						{item.btns.map((item: any) => {
+							return (
+								<Button
+									key={item.text}
+									type={item.type}
+									size={item.size}
+									style={{ marginLeft: item.marginLeft }}
+									danger={item.isDanger}
+									onClick={() => {
+										switch (item.text) {
+											case "搜索":
+												handleClick()
+												break
+											case "重置":
+												handleReset()
+												break
+										}
+									}}
+								>
+									{item.text}
+								</Button>
+							)
+						})}
 					</>
 				)
 		}
@@ -100,9 +135,14 @@ const DcForm: React.FC<FormType> = memo(props => {
 	}
 
 	const handleClick = () => {
-		submit(formData)
+		submit!(formData)
 	}
 
+	// 清空搜索条件
+	const handleReset = () => {
+		setFormData({})
+		submit!({})
+	}
 	return (
 		<DcFormWrapper>
 			<Form style={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
@@ -117,16 +157,6 @@ const DcForm: React.FC<FormType> = memo(props => {
 						</Form.Item>
 					)
 				})}
-				<Button
-					type="primary"
-					danger={type === "search"}
-					style={{ marginLeft: "20px" }}
-					onClick={() => {
-						handleClick()
-					}}
-				>
-					{type === "search" ? "搜索" : "提交"}
-				</Button>
 				{type === "upload" ? (
 					<MDEditor
 						className="md gooooooooo"

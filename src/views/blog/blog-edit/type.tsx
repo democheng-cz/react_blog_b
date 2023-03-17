@@ -1,5 +1,3 @@
-import { Select, Input } from "antd"
-
 export const blogCategoryConfig = {
 	type: "upload",
 	hasUpload: true,
@@ -19,21 +17,18 @@ export const blogCategoryConfig = {
 			label: "标题",
 			width: "30%",
 			type: "input",
-			element: <Input />,
 		},
 		{
 			name: "status",
 			label: "状态",
 			width: "30%",
 			type: "select",
-			element: <Select />,
 		},
 		{
 			name: "category_id",
 			label: "分类",
 			width: "30%",
 			type: "select",
-			element: <Select />,
 		},
 		{
 			name: "cover",
@@ -46,6 +41,19 @@ export const blogCategoryConfig = {
 			label: "",
 			type: "md",
 			with: "100%",
+		},
+		{
+			type: "btns",
+			name: "btns",
+			btns: [
+				{
+					type: "primary",
+					text: "搜索",
+					isDanger: false,
+					marginLeft: "20px",
+					size: "small",
+				},
+			],
 		},
 	],
 }

@@ -4,6 +4,7 @@ import { configureStore } from "@reduxjs/toolkit"
 import thunk from "redux-thunk"
 import loginReducer from "./feature/login/reducer"
 import blogReducer from "./feature/blog/reducer"
+import userReducer from "./feature/user/reducer"
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
@@ -12,6 +13,7 @@ const store = configureStore({
 	reducer: {
 		login: loginReducer,
 		blog: blogReducer,
+		user: userReducer,
 	},
 })
 

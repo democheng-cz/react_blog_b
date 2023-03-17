@@ -1,33 +1,29 @@
-export const blogManageConfig = {
+import { Select, Input } from "antd"
+
+export const searchConfig = {
 	type: "search",
-	hasUpload: false,
+	hasUpload: true,
 	statusOptions: [
 		{
-			label: "已发布",
+			label: "启用",
 			value: 1,
 		},
 		{
-			label: "未发布",
+			label: "禁用",
 			value: 0,
 		},
 	],
-	// categoryOptions: [],
+	hasBtns: true,
 	formItems: [
 		{
-			name: "title",
-			label: "标题",
+			name: "name",
+			label: "昵称",
 			width: "25%",
 			type: "input",
 		},
 		{
 			name: "status",
 			label: "状态",
-			width: "25%",
-			type: "select",
-		},
-		{
-			name: "category_id",
-			label: "分类",
 			width: "25%",
 			type: "select",
 		},

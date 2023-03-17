@@ -60,6 +60,10 @@ class DcRequest {
 	delete<T>(config: AxiosRequestConfig) {
 		return this.instance<T>({ ...config, method: "DELETE" })
 	}
+
+	patch<T>(config: AxiosRequestConfig) {
+		return this.instance<T>({ ...config, method: "PATCH" })
+	}
 }
 
 const request = new DcRequest()

@@ -1,7 +1,9 @@
 import React, { memo } from "react"
 
+import { UserRoleWrapper } from "./style"
+
 const UserRole = memo(() => {
-	return <div>UserRole</div>
+	return <UserRoleWrapper>UserRole</UserRoleWrapper>
 })
 
 export default UserRole

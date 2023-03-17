@@ -6,13 +6,9 @@ const Login = lazy(() => import("@/views/login"))
 const Layout = lazy(() => import("@/views/Layout"))
 const BlogManage = lazy(() => import("@/views/blog/blog-manage"))
 const BlogEdit = lazy(() => import("@/views/blog/blog-edit"))
+const BlogDetail = lazy(() => import("@/views/blog-detail"))
 const UserManage = lazy(() => import("@/views/user/user-manage"))
 const UserRole = lazy(() => import("@/views/user/user-role"))
-const BlogDetail = lazy(() => import("@/views/blog-detail"))
-const TopicManage = lazy(() => import("@/views/topic/topic-manage"))
-const SettingProfile = lazy(() => import("@/views/setting/setting-profile"))
-const SettingUser = lazy(() => import("@/views/setting/setting-user"))
-const SettingSystem = lazy(() => import("@/views/setting/setting-system"))
 
 const routes: RouteObject[] = [
 	{

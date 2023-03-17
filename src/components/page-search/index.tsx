@@ -1,7 +1,5 @@
 import React, { memo, useState } from "react"
 
-import { UploadOutlined } from "@ant-design/icons"
-
 import { PageSearchWrapper } from "./style"
 import DcForm from "../dc-form"
 
