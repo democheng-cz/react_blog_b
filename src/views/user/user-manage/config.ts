@@ -1,6 +1,7 @@
 import { Select, Input } from "antd"
 
 export const searchConfig = {
+	name: "user",
 	type: "search",
 	hasUpload: true,
 	statusOptions: [

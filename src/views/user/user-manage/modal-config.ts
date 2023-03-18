@@ -1,4 +1,5 @@
 export const modalConfig = {
+	name: "user",
 	type: "update",
 	hasUpload: true,
 	statusOptions: [

@@ -1,4 +1,5 @@
 export const blogManageConfig = {
+	name: "blog",
 	type: "search",
 	hasUpload: false,
 	statusOptions: [

@@ -29,10 +29,11 @@ interface UserTableType {
 interface TablePropsType {
 	setShowModal: (val: boolean) => void
 	setModalFormData: (val: any) => void
+	setTableKey: (val: any) => void
 }
 export const TableColumns = (props: TablePropsType) => {
-	console.log("我被调用了")
-	const { setShowModal, setModalFormData } = props
+	const [flag, setFlag] = useState(false)
+	const { setShowModal, setModalFormData, setTableKey } = props
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
 	const { category } = useAppSelector(state => {
@@ -40,6 +41,8 @@ export const TableColumns = (props: TablePropsType) => {
 			category: state.blog.blogCategory,
 		}
 	})
+
+	console.log("first")
 
 	// 修改博客信息
 	const updateUserInfo = (record: UserTableType) => {
@@ -58,9 +61,11 @@ export const TableColumns = (props: TablePropsType) => {
 	}
 
 	// 修改状态
-	const handleSwitchClick = async (checked: boolean) => {
-		const res = await reqUpdateUserInfo({ state: Number(checked) })
-		console.log(res)
+	const handleSwitchClick = async (checked: boolean, record: UserTableType) => {
+		const res = await reqUpdateUserInfo({
+			state: Number(checked),
+			user_id: record.user_id,
+		})
 		if (res.status === 201) {
 			message.success("修改成功")
 			await dispatch(fetchUserList({}))
@@ -102,11 +107,16 @@ export const TableColumns = (props: TablePropsType) => {
 			dataIndex: ["state"],
 			width: "10%",
 			align: "center",
-			render: text => {
+			render: (text, record) => {
 				return (
 					<Space>
 						<span>{text}</span>
-						<Switch defaultChecked={!!text} onChange={handleSwitchClick} />
+						<Switch
+							checked={text}
+							onChange={(checked: boolean) =>
+								handleSwitchClick(checked, record)
+							}
+						/>
 					</Space>
 				)
 			},

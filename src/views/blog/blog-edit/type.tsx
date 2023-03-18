@@ -1,4 +1,5 @@
 export const blogCategoryConfig = {
+	name: "blog",
 	type: "upload",
 	hasUpload: true,
 	statusOptions: [
@@ -48,7 +49,7 @@ export const blogCategoryConfig = {
 			btns: [
 				{
 					type: "primary",
-					text: "搜索",
+					text: "确定",
 					isDanger: false,
 					marginLeft: "20px",
 					size: "small",

@@ -11,6 +11,7 @@ interface UserInfoType {
 	role?: string
 	avatar?: string
 	state?: number
+	user_id: string
 }
 
 interface ResType {
@@ -29,9 +30,13 @@ export const reqUserList = (query: queryType) => {
 }
 
 // 修改用户信息
-export const reqUpdateUserInfo = (userInfo: UserInfoType) => {
+export const reqUpdateUserInfo = (
+	userInfo: UserInfoType,
+	type?: "avatar" | "cover"
+) => {
 	return request.patch<ResType>({
 		url: "/user/update",
 		data: { ...userInfo },
+		params: { type },
 	})
 }

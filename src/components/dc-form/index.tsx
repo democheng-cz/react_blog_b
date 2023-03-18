@@ -28,7 +28,7 @@ const DcForm: React.FC<FormType> = memo(props => {
 	const selectRef = useRef<any>(null)
 
 	const {
-		formConfig: { type, statusOptions, formItems },
+		formConfig: { type, statusOptions, formItems, name },
 		selectData,
 		submit,
 		formData,
@@ -72,7 +72,9 @@ const DcForm: React.FC<FormType> = memo(props => {
 						)}
 						<Upload
 							fileList={fileList}
-							customRequest={(files: any) => handleCustomRequest(files)}
+							customRequest={(files: any) =>
+								handleCustomRequest(files, item.name)
+							}
 						>
 							<Button icon={<UploadOutlined />}>请选择上传文件</Button>
 						</Upload>
@@ -108,16 +110,18 @@ const DcForm: React.FC<FormType> = memo(props => {
 				)
 		}
 	}
-	const handleCustomRequest = async (file: any) => {
-		const formData = new FormData()
-		formData.append("cover", file.file as RcFile)
+	const handleCustomRequest = async (file: any, type: string) => {
+		const formData1 = new FormData()
+		formData1.append(type, file.file as RcFile)
 		const res: any = await request.post({
-			url: "/blog/upload",
-			data: formData,
+			url: `/${name}/avatar`,
+			data: formData1,
 		})
+		console.log(res)
 		if (res.status === 200) {
+			console.log(type)
 			setFileList([...fileList, file.file])
-			setFormData({ ...formData, cover: res.result.filePath })
+			setFormData({ ...formData, [type]: res.result.filepath })
 		}
 	}
 

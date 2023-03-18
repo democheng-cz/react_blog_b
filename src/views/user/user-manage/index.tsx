@@ -8,6 +8,7 @@ import usePageSearch from "@/hooks/usePageSearch"
 
 import PageTable from "@/components/page-table"
 import { TableColumns } from "./table"
+import usePageTable from "@/hooks/usePageTable"
 
 import PageModal from "@/components/page-modal"
 import { modalConfig } from "./modal-config"
@@ -46,7 +47,7 @@ const UserManage = memo(() => {
 	// 修改用户信息的回调
 	const handleUpdateCallback = async (value: any) => {
 		console.log(value)
-		const res = await reqUpdateUserInfo(value)
+		const res = await reqUpdateUserInfo(value, "avatar")
 		if (res.status === 201) {
 			// console.log(res)
 			message.success("修改成功")
@@ -58,6 +59,8 @@ const UserManage = memo(() => {
 
 	const { modalFormData, setModalFormData, handleUpdate } =
 		usePageModal(handleUpdateCallback)
+
+	const { tableKey, setTableKey } = usePageTable()
 
 	useEffect(() => {
 		dispatch(fetchUserList({}))
@@ -75,7 +78,8 @@ const UserManage = memo(() => {
 
 			{/* 表格 */}
 			<PageTable
-				columns={TableColumns({ setShowModal, setModalFormData })}
+				key={tableKey}
+				columns={TableColumns({ setShowModal, setModalFormData, setTableKey })}
 				data={userList}
 				rowKey={record => record.user_id}
 				pagination={paginationProps}
