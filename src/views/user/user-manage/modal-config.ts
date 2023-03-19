@@ -27,7 +27,7 @@ export const modalConfig = {
 			type: "select",
 		},
 		{
-			name: "role",
+			name: "role_id",
 			label: "角色",
 			width: "80%",
 			type: "select",

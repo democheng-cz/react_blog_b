@@ -1,18 +1,14 @@
 import React, { useEffect, useLayoutEffect, useState, Suspense } from "react"
 import {} from "@ant-design/icons"
 import { Layout, Menu } from "antd"
-import {
-	Outlet,
-	useLocation,
-	useParams,
-	useSearchParams,
-} from "react-router-dom"
-import { ItemType } from "antd/es/menu/hooks/useItems"
+import { Outlet, useLocation } from "react-router-dom"
 import styled from "styled-components"
 
 import {
 	createSaveMenuList,
 	createSaveActiveMenu,
+	getRoleList,
+	getMenuList,
 } from "@/store/feature/login/actions"
 import LayoutHeader from "@/components/layout-header"
 import Auth from "@/components/auth/auth"
@@ -20,6 +16,7 @@ import { useAppSelector, useAppDispatch } from "@/store"
 
 import dcCache from "@/utils/localstore"
 import DcMenu from "@/components/dc-menu"
+import DcLoading from "@/components/dc-loading"
 
 const { Content, Sider } = Layout
 
@@ -28,10 +25,11 @@ const Container: React.FC = () => {
 
 	const location = useLocation()
 
-	const { menuList, activeMenu } = useAppSelector(state => {
+	const { menuList, activeMenu, userInfo } = useAppSelector(state => {
 		return {
 			menuList: state.login.menuList,
 			activeMenu: state.login.activeMenu,
+			userInfo: state.login.userInfo,
 		}
 	})
 
@@ -41,6 +39,7 @@ const Container: React.FC = () => {
 		let newArr = Array.from(new Set(arr))
 		dispatch(createSaveActiveMenu({ openKey: newArr, selectKey: e.keyPath[0] }))
 	}
+
 	const changeSelectItem = (openKeys: any) => {
 		dispatch(
 			createSaveActiveMenu({
@@ -63,7 +62,10 @@ const Container: React.FC = () => {
 			<LayoutWrapper>
 				<Layout>
 					{/* 左侧菜单栏 */}
-					<Sider width={240} style={{ height: "100%", overflow: "hidden" }}>
+					<Sider
+						width={240}
+						style={{ height: "100%", overflow: "hidden", minHeight: "100%" }}
+					>
 						<h1 className="logo">easyBlog</h1>
 						<DcMenu
 							changeMenuItem={(e: any) => {
@@ -81,10 +83,13 @@ const Container: React.FC = () => {
 						{/* 头部 */}
 						<LayoutHeader />
 						<Layout
-							style={{ padding: "15px", backgroundColor: "#fff" }}
+							style={{
+								padding: "15px",
+								backgroundColor: "#fff",
+							}}
 							className="layout-main"
 						>
-							{/* 内如区 */}
+							{/* 内容区 */}
 							<Content
 								style={{
 									padding: 24,
@@ -93,7 +98,7 @@ const Container: React.FC = () => {
 									background: "#fff",
 								}}
 							>
-								<Suspense fallback="......">
+								<Suspense fallback={<DcLoading />}>
 									<Outlet />
 								</Suspense>
 							</Content>
@@ -121,8 +126,8 @@ const LayoutWrapper = styled.div`
 		font-size: 16px;
 	}
 	.header {
-		background-color: pink;
 		display: flex;
+		background-color: red;
 		justify-content: flex-end;
 		.userInfo {
 			color: #1890ff;

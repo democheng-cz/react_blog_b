@@ -3,12 +3,17 @@ import React, { memo, useEffect, useState } from "react"
 import { Button } from "antd"
 
 import { BlogManageWrapper } from "./style"
+
 import PageSearch from "@/components/page-search"
+import { blogManageConfig } from "./type"
+import usePageSearch from "@/hooks/usePageSearch"
+
 import PageTable from "@/components/page-table"
-import { TableColumns } from "./table"
+import { tableConfig } from "./table-config"
+import usePageTable from "@/hooks/usePageTable"
+
 import { useAppDispatch, useAppSelector } from "@/store"
 import { fetchBlogCategory, fetchBlogList } from "@/store/feature/blog/reducer"
-import { blogManageConfig } from "./type"
 
 interface FormDataType {
 	title: string
@@ -31,6 +36,10 @@ const BlogManage = memo(() => {
 		status: null,
 		category_id: "",
 	})
+
+	const submitCallback = () => {}
+
+	const { tableKey, setTableKey } = usePageTable()
 
 	useEffect(() => {
 		dispatch(fetchBlogList({}))
@@ -56,12 +65,9 @@ const BlogManage = memo(() => {
 			<div className="search">
 				<PageSearch
 					formConfig={blogManageConfig}
-					handleSubmit={(query: any) => handleFilter(query)}
 					selectData={blogCategory.map((item: any) => {
 						return { label: item.category_name, value: item.category_id }
 					})}
-					formData={formData}
-					setFormData={setFormData}
 				/>
 			</div>
 			<div className="add" style={{ margin: "15px 0" }}>
@@ -71,11 +77,10 @@ const BlogManage = memo(() => {
 			{/* blog列表数据 */}
 			<div className="table">
 				<PageTable
-					columns={TableColumns(setFormData)}
+					tableConfig={tableConfig}
 					data={blogList}
-					rowKey={record => record.blog_id}
+					rowKey={(record: any) => record.blog_id}
 					pagination={paginationProps}
-					isLoading={true}
 				/>
 			</div>
 		</BlogManageWrapper>

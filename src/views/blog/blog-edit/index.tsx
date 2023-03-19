@@ -51,13 +51,10 @@ const BlogCategory = memo(() => {
 	return (
 		<BlogCategoryWrapper>
 			<PageSearch
-				handleSubmit={(value: any) => handleSubmit(value)}
 				selectData={blogCategory.map((item: any) => {
 					return { label: item.category_name, value: item.category_id }
 				})}
 				formConfig={blogCategoryConfig}
-				formData={formData}
-				setFormData={setFormData}
 			/>
 
 			{/* <MDEditor.Markdown source={value} style={{ whiteSpace: "pre-wrap" }} /> */}

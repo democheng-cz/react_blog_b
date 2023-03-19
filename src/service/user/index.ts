@@ -40,3 +40,15 @@ export const reqUpdateUserInfo = (
 		params: { type },
 	})
 }
+
+// 修改用户状态
+export const reqUpdateUserState = (info: {
+	state: number
+	user_id: string
+}) => {
+	console.log(info)
+	return request.patch<ResType>({
+		url: "/user/update/state",
+		data: { ...info },
+	})
+}

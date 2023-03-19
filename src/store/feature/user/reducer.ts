@@ -5,8 +5,8 @@ import { reqUserList } from "@/service/user"
 export const fetchUserList = createAsyncThunk(
 	"user/fetchUserList",
 	async (payload: any, { dispatch }) => {
+		console.log("first")
 		const res: any = await reqUserList(payload)
-		// dispatch()
 		return res.result.data
 	}
 )

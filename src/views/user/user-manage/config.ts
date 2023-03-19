@@ -28,25 +28,21 @@ export const searchConfig = {
 			width: "25%",
 			type: "select",
 		},
+	],
+	btns: [
 		{
-			type: "btns",
-			name: "btns",
-			btns: [
-				{
-					type: "primary",
-					text: "搜索",
-					isDanger: false,
-					marginLeft: "20px",
-					size: "small",
-				},
-				{
-					type: "primary",
-					text: "重置",
-					isDanger: true,
-					marginLeft: "20px",
-					size: "small",
-				},
-			],
+			type: "primary",
+			text: "搜索",
+			isDanger: false,
+			marginLeft: "20px",
+			size: "small",
+		},
+		{
+			type: "primary",
+			text: "重置",
+			isDanger: true,
+			marginLeft: "20px",
+			size: "small",
 		},
 	],
 }

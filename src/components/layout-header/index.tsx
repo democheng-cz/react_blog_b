@@ -63,7 +63,7 @@ const LayoutHeader = memo(() => {
 							<a onClick={e => e.preventDefault()}>
 								<Space>
 									<span className="nickname">
-										{userInfo.nickName || "test"}
+										{userInfo.nickname || "test"}
 									</span>
 									<DownOutlined />
 								</Space>

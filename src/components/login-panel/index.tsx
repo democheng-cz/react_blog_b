@@ -12,10 +12,10 @@ import {
 	createSaveActiveMenu,
 	createSaveUserInfo,
 	getMenuList,
+	getRoleList,
 } from "@/store/feature/login/actions"
 
 const LoginPanel = memo((props: any) => {
-	const [checkCodeUrl, setCheckCodeUrl] = useState<string>("/api/checkCode")
 	const [messageApi, contextHolder] = message.useMessage()
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
@@ -28,12 +28,10 @@ const LoginPanel = memo((props: any) => {
 	}
 
 	const onFinish = async (values: any) => {
-		// console.log(values)
 		try {
 			const res: any = await reqLogin(values)
-			console.log(res)
 			if (res.status === 200) {
-				props.getMenuList()
+				dispatch(getMenuList(res.result.data.role_id))
 				dispatch(createSaveUserInfo(res.result.data))
 				dispatch(createSavaToken(res.result.token))
 				dispatch(
@@ -117,9 +115,9 @@ const mapDispatchToProps = (dispatch: any) => {
 		saveUserInfo: (payload: any) => {
 			dispatch({ type: SAVE_USERINFO, payload })
 		},
-		getMenuList: (payload: any) => {
-			dispatch(getMenuList())
-		},
+		// getMenuList: (payload: any) => {
+		// 	dispatch(getMenuList())
+		// },
 	}
 }
 

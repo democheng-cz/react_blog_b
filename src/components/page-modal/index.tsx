@@ -1,38 +1,50 @@
-import React, { memo } from "react"
+import React, { memo, useState, useImperativeHandle } from "react"
 
 import { Modal } from "antd"
 
 import { PageModalWrapper } from "./style"
+
+import { reqUpdateUserInfo, reqUserList } from "@/service/user/index"
+
 import DcForm from "../dc-form"
+import { useAppDispatch } from "@/store"
+import { fetchUserList } from "@/store/feature/user/reducer"
 
 interface PageModalPropsType {
 	formConfig: any
 	selectData: any[]
-	handleSubmit?: (query: any) => void
-	formData: any
-	setFormData: (FormData: any) => void
-	showModal: boolean
-	setShowModal: (flag: boolean) => void
 }
 
-const PageModal: React.FC<PageModalPropsType> = memo(props => {
-	const {
-		formConfig,
-		selectData,
-		formData,
-		setFormData,
-		showModal,
-		setShowModal,
-		handleSubmit,
-	} = props
+const PageModal = (props: PageModalPropsType, ref: any) => {
+	const dispatch = useAppDispatch()
 
-	const handleOk = () => {
-		handleSubmit!(formData)
+	const { formConfig, selectData } = props
+	let originData = {}
+
+	const [showModal, setShowModal] = useState(false)
+	const [formData, setFormData] = useState<any>()
+
+	const handleOk = async () => {
+		await reqUpdateUserInfo(formData)
+		dispatch(fetchUserList({}))
 		setShowModal(false)
 	}
+
 	const handleCancel = () => {
 		setShowModal(false)
 	}
+
+	// 将需要给父组件调用的方法和属性暴露给父组件
+	useImperativeHandle(
+		ref,
+		() => {
+			return {
+				setShowModal,
+			}
+		},
+		[]
+	)
+
 	return (
 		<PageModalWrapper>
 			<Modal
@@ -52,5 +64,5 @@ const PageModal: React.FC<PageModalPropsType> = memo(props => {
 			</Modal>
 		</PageModalWrapper>
 	)
-})
-export default PageModal
+}
+export default React.forwardRef(PageModal)

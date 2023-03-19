@@ -2,13 +2,11 @@ import {
 	SAVE_USERINFO,
 	LOGOUT,
 	SAVE_ACTIVE_MENU,
-	LOGIN,
 	SAVE_TOKEN,
 	SAVE_MENU_LIST,
+	SAVE_ROLE_lIST,
 } from "./CONSTANT"
 import dcCache from "@/utils/localstore"
-
-import reactCookies from "react-cookies"
 interface ActionType {
 	type: string
 	payload?: any
@@ -30,6 +28,7 @@ interface InitStateType {
 		selectKey: string
 	}
 	menuList: any[]
+	roleList: any[]
 }
 const initState: InitStateType = {
 	userInfo: {},
@@ -38,6 +37,7 @@ const initState: InitStateType = {
 		selectKey: "",
 	},
 	menuList: [],
+	roleList: [],
 }
 
 const loginReducer = function (state = initState, action: ActionType) {
@@ -49,7 +49,6 @@ const loginReducer = function (state = initState, action: ActionType) {
 				...state,
 				userInfo: payload,
 			}
-			break
 		case SAVE_TOKEN:
 			dcCache.setCache("token", payload)
 			return {
@@ -76,6 +75,13 @@ const loginReducer = function (state = initState, action: ActionType) {
 			return {
 				...state,
 				menuList: payload,
+			}
+		}
+		case SAVE_ROLE_lIST: {
+			dcCache.setCache("roleList", payload)
+			return {
+				...state,
+				roleList: payload,
 			}
 		}
 		default:

@@ -1,4 +1,4 @@
-import React, { memo, useState, useCallback, useRef } from "react"
+import React, { memo, useState, useCallback, useRef, ReactNode } from "react"
 
 import { Form, Input, Select, Button, Upload, message, Image } from "antd"
 import { UploadOutlined } from "@ant-design/icons"
@@ -17,23 +17,21 @@ import { DcFormWrapper } from "./style"
 interface FormType {
 	formConfig: any
 	selectData?: any[]
-	submit?: (query: any) => void
-	fieldsChange?: (newValue: any[]) => void
 	customRequest?: (file: any) => void
 	formData: any
 	setFormData: (val: any) => void
+	Btn?: any
 }
 
 const DcForm: React.FC<FormType> = memo(props => {
-	const selectRef = useRef<any>(null)
-
 	const {
 		formConfig: { type, statusOptions, formItems, name },
 		selectData,
-		submit,
 		formData,
+		Btn,
 		setFormData,
 	} = props
+
 	const [fileList, setFileList] = useState<UploadFile[]>([])
 
 	const renderFormItem = function renderFormItem(item: any) {
@@ -55,10 +53,7 @@ const DcForm: React.FC<FormType> = memo(props => {
 							}}
 							defaultValue={formData[item.name]}
 							allowClear={true}
-							ref={selectRef}
-							onClear={() => {
-								console.log("first")
-							}}
+							labelInValue={true}
 						></Select>
 					</>
 				)
@@ -80,36 +75,38 @@ const DcForm: React.FC<FormType> = memo(props => {
 						</Upload>
 					</>
 				)
-			case "btns":
-				return (
-					<>
-						{item.btns.map((item: any) => {
-							return (
-								<Button
-									key={item.text}
-									type={item.type}
-									size={item.size}
-									style={{ marginLeft: item.marginLeft }}
-									danger={item.isDanger}
-									onClick={() => {
-										switch (item.text) {
-											case "搜索":
-												handleClick()
-												break
-											case "重置":
-												handleReset()
-												break
-										}
-									}}
-								>
-									{item.text}
-								</Button>
-							)
-						})}
-					</>
-				)
+			// case "btns":
+			// 	return (
+			// 		<>
+			// 			{item.btns.map((item: any) => {
+			// 				return (
+			// 					<Button
+			// 						key={item.text}
+			// 						type={item.type}
+			// 						size={item.size}
+			// 						style={{ marginLeft: item.marginLeft }}
+			// 						danger={item.isDanger}
+			// 						onClick={() => {
+			// 							switch (item.text) {
+			// 								case "搜索":
+			// 									handleClick()
+			// 									break
+			// 								case "重置":
+			// 									handleReset()
+			// 									break
+			// 							}
+			// 						}}
+			// 					>
+			// 						{item.text}
+			// 					</Button>
+			// 				)
+			// 			})}
+			// 		</>
+			// 	)
 		}
 	}
+
+	// 上传图片
 	const handleCustomRequest = async (file: any, type: string) => {
 		const formData1 = new FormData()
 		formData1.append(type, file.file as RcFile)
@@ -117,7 +114,6 @@ const DcForm: React.FC<FormType> = memo(props => {
 			url: `/${name}/avatar`,
 			data: formData1,
 		})
-		console.log(res)
 		if (res.status === 200) {
 			console.log(type)
 			setFileList([...fileList, file.file])
@@ -125,28 +121,20 @@ const DcForm: React.FC<FormType> = memo(props => {
 		}
 	}
 
+	// 修改formData数据
 	const handleChange = (e: any, prop: string, type: string) => {
 		switch (type) {
 			case "input":
 				setFormData!({ ...formData, [prop]: e.target.value })
 				break
 			case "select":
-				setFormData!({ ...formData, [prop]: e })
+				setFormData!({ ...formData, [prop]: e.value })
 				break
 			case "md":
 				setFormData({ ...formData, [prop]: e })
 		}
 	}
 
-	const handleClick = () => {
-		submit!(formData)
-	}
-
-	// 清空搜索条件
-	const handleReset = () => {
-		setFormData({})
-		submit!({})
-	}
 	return (
 		<DcFormWrapper>
 			<Form style={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
@@ -161,6 +149,11 @@ const DcForm: React.FC<FormType> = memo(props => {
 						</Form.Item>
 					)
 				})}
+				<Form.Item>
+					{Btn.map((item: ReactNode) => {
+						return item
+					})}
+				</Form.Item>
 				{type === "upload" ? (
 					<MDEditor
 						className="md gooooooooo"

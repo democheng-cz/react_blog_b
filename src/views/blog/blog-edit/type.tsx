@@ -43,18 +43,14 @@ export const blogCategoryConfig = {
 			type: "md",
 			with: "100%",
 		},
+	],
+	btns: [
 		{
-			type: "btns",
-			name: "btns",
-			btns: [
-				{
-					type: "primary",
-					text: "确定",
-					isDanger: false,
-					marginLeft: "20px",
-					size: "small",
-				},
-			],
+			type: "primary",
+			text: "确定",
+			isDanger: false,
+			marginLeft: "20px",
+			size: "small",
 		},
 	],
 }

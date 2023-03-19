@@ -4,8 +4,9 @@ import {
 	SAVE_TOKEN,
 	SAVE_MENU_LIST,
 	LOGOUT,
+	SAVE_ROLE_lIST,
 } from "./CONSTANT"
-import { reqLogin, reqMenuList } from "@/service/login"
+import { reqLogin, reqMenuList, reqRoleList } from "@/service/login"
 
 export const createSaveUserInfo = (payload: any) => {
 	return {
@@ -35,11 +36,20 @@ export const createSaveMenuList = (payload: any[]) => {
 	}
 }
 
-export const getMenuList = () => {
+export const getMenuList = (role_id: number) => {
 	return async (dispatch: any, state: any) => {
-		const res: any = await reqMenuList()
+		const res: any = await reqMenuList(role_id)
 		if (res.status === 200) {
-			dispatch(createSaveMenuList(res.result.data.menuList))
+			dispatch(createSaveMenuList(res.result.data))
+		}
+	}
+}
+
+export const getRoleList = () => {
+	return async (dispatch: any, state: any) => {
+		const res: any = await reqRoleList()
+		if (res.status === 200) {
+			dispatch({ type: SAVE_ROLE_lIST, payload: res.result.data })
 		}
 	}
 }

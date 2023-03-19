@@ -1,20 +1,23 @@
-import { useState } from "react"
+import { ElementRef, useRef, useState } from "react"
 
-function usePageSearch(submitCallback: (val: any) => void) {
-	const [formData, setFormData] = useState({
-		name: "",
-		status: "",
-	})
+import PageTable from "@/components/page-table"
 
-	// 用于处理提交
-	const handleSubmit = (val: any) => {
-		submitCallback(val)
+function usePageSearch() {
+	const PageTableRef: any = useRef<ElementRef<typeof PageTable>>()
+
+	const handleSearch = (formData: any) => {
+		PageTableRef.current!.getDataList(formData)
+	}
+
+	const handleReset = () => {
+		// console.log("reset")
+		PageTableRef.current!.getDataList({})
 	}
 
 	return {
-		handleSubmit,
-		searchFormData: formData,
-		setSearchFormData: setFormData,
+		PageTableRef,
+		handleSearch,
+		handleReset,
 	}
 }
 
