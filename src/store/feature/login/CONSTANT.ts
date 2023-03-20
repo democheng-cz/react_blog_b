@@ -1,0 +1,7 @@
+export const SAVE_USERINFO = "login/save_userinfo"
+export const LOGOUT = "login/logout"
+export const SAVE_ACTIVE_MENU = "login/save_activeMenu"
+export const LOGIN = "login"
+export const SAVE_TOKEN = "save_token"
+export const SAVE_MENU_LIST = "save_menu_list"
+export const SAVE_ROLE_lIST = "save_role_list"
