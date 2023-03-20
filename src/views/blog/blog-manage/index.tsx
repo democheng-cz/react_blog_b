@@ -5,15 +5,15 @@ import { Button } from "antd"
 import { BlogManageWrapper } from "./style"
 
 import PageSearch from "@/components/page-search"
-import { blogManageConfig } from "./type"
+import { searchConfig } from "./search-config"
 import usePageSearch from "@/hooks/usePageSearch"
 
 import PageTable from "@/components/page-table"
 import { tableConfig } from "./table-config"
-import usePageTable from "@/hooks/usePageTable"
 
 import { useAppDispatch, useAppSelector } from "@/store"
 import { fetchBlogCategory, fetchBlogList } from "@/store/feature/blog/reducer"
+import { useNavigate } from "react-router-dom"
 
 interface FormDataType {
 	title: string
@@ -23,6 +23,9 @@ interface FormDataType {
 
 const BlogManage = memo(() => {
 	const dispatch = useAppDispatch()
+
+	const navigate = useNavigate()
+
 	const { blogList, total, blogCategory } = useAppSelector((state: any) => {
 		return {
 			blogList: state.blog.blogList,
@@ -31,48 +34,42 @@ const BlogManage = memo(() => {
 		}
 	})
 
-	const [formData, setFormData] = useState<FormDataType>({
-		title: "",
-		status: null,
-		category_id: "",
+	const addCallback = () => {
+		navigate("/blog/edit")
+	}
+
+	const { PageTableRef, handleSearch, handleReset, handleAdd } = usePageSearch({
+		addCallback,
 	})
-
-	const submitCallback = () => {}
-
-	const { tableKey, setTableKey } = usePageTable()
 
 	useEffect(() => {
 		dispatch(fetchBlogList({}))
 		dispatch(fetchBlogCategory())
 	}, [])
 
-	const handleFilter = (query: any) => {
-		dispatch(fetchBlogList(query))
-	}
-
 	const paginationProps = {
 		pageSize: 10,
 		pageSizeOptions: [5, 10, 15],
 		responsive: true, //当size未指定时, 根据屏幕自适应
 		showQuickJumper: true, // 开启快速跳转页码
-		// size: "small",
+		size: "small",
 		total,
 		onchange: (page: number, pageSize: number) => {},
 		onShowSizeChange: (current: number, size: number) => {},
 	}
+
 	return (
 		<BlogManageWrapper>
 			<div className="search">
 				<PageSearch
-					formConfig={blogManageConfig}
+					formConfig={searchConfig}
 					selectData={blogCategory.map((item: any) => {
 						return { label: item.category_name, value: item.category_id }
 					})}
+					searchChange={(formData: any) => handleSearch(formData)}
+					resetChange={() => handleReset()}
+					addChange={() => handleAdd()}
 				/>
-			</div>
-			<div className="add" style={{ margin: "15px 0" }}>
-				{/* 新增按钮 */}
-				<Button type="primary">新增</Button>
 			</div>
 			{/* blog列表数据 */}
 			<div className="table">
@@ -81,6 +78,8 @@ const BlogManage = memo(() => {
 					data={blogList}
 					rowKey={(record: any) => record.blog_id}
 					pagination={paginationProps}
+					ref={PageTableRef}
+					pageName="blog"
 				/>
 			</div>
 		</BlogManageWrapper>

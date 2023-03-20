@@ -1,7 +1,7 @@
-export const blogManageConfig = {
+export const blogCategoryConfig = {
 	name: "blog",
-	type: "search",
-	hasUpload: false,
+	type: "upload",
+	hasUpload: true,
 	statusOptions: [
 		{
 			label: "已发布",
@@ -12,39 +12,46 @@ export const blogManageConfig = {
 			value: 0,
 		},
 	],
-	// categoryOptions: [],
 	formItems: [
 		{
 			name: "title",
 			label: "标题",
-			width: "25%",
+			width: "30%",
 			type: "input",
+		},
+		{
+			name: "blog_id",
 		},
 		{
 			name: "status",
 			label: "状态",
-			width: "25%",
+			width: "30%",
 			type: "select",
 		},
 		{
 			name: "category_id",
 			label: "分类",
-			width: "25%",
+			width: "30%",
 			type: "select",
+		},
+		{
+			name: "cover",
+			label: "上传封面",
+			type: "upload",
+			width: "20%",
+		},
+		{
+			name: "content",
+			label: "",
+			type: "md",
+			with: "100%",
 		},
 	],
 	btns: [
 		{
 			type: "primary",
-			text: "搜索",
+			text: "确定",
 			isDanger: false,
-			marginLeft: "20px",
-			size: "small",
-		},
-		{
-			type: "primary",
-			text: "重置",
-			isDanger: true,
 			marginLeft: "20px",
 			size: "small",
 		},

@@ -57,8 +57,13 @@ const LayoutHeader = memo(() => {
 		<LayoutHeaderWrapper>
 			{userInfo?.account && (
 				<Header className="header">
-					<span>欢迎回来，</span>
+					<img
+						src={userInfo.avatar || require("@/assets/images/猫和老鼠.png")}
+						alt=""
+						style={{ height: "50px" }}
+					/>
 					<div className="userInfo">
+						<span style={{ color: "#fff" }}>欢迎回来，</span>
 						<Dropdown menu={{ items }}>
 							<a onClick={e => e.preventDefault()}>
 								<Space>
@@ -69,10 +74,6 @@ const LayoutHeader = memo(() => {
 								</Space>
 							</a>
 						</Dropdown>
-						<img
-							src={userInfo.avatar || require("@/assets/images/猫和老鼠.png")}
-							alt=""
-						/>
 					</div>
 				</Header>
 			)}

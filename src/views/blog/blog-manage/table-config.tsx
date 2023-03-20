@@ -28,39 +28,6 @@ interface BlogTableType {
 	content: string
 }
 
-// export const TableColumns = (setFormData: (val: any) => void) => {
-// 	const navigate = useNavigate()
-// 	const dispatch = useAppDispatch()
-// 	const { category } = useAppSelector(state => {
-// 		return {
-// 			category: state.blog.blogCategory,
-// 		}
-// 	})
-
-// 	const handleToBlogDetail = (record: BlogTableType) => {
-// 		dispatch(fetchBlogDetail(record.blog_id))
-// 		navigate(`/blog/${record.blog_id}`)
-// 	}
-
-// 	const updateBLogInfo = (record: BlogTableType) => {
-// 		const { title, status, content, category_id, cover } = record
-// 		dispatch(
-// 			updateCurrentBlogFormData({ title, status, content, category_id, cover })
-// 		)
-// 		navigate("/blog/edit")
-// 	}
-
-// 	const confirm = async (record: any) => {
-// 		const res = await reqDeleteBlog(record.blog_id)
-// 		if (res.status === 200) {
-// 			message.success("删除成功")
-// 		}
-// 		dispatch(fetchBlogList(null))
-// 	}
-
-// 	return PageTableColumns
-// }
-
 export const tableConfig = {
 	columns: [
 		{
@@ -72,7 +39,6 @@ export const tableConfig = {
 		},
 		{
 			title: "文章信息",
-			// dataIndex: "nick_name",
 			key: "blog_id",
 			width: "40%",
 		},

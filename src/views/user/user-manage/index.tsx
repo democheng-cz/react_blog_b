@@ -3,7 +3,7 @@ import React, { memo, useState, useEffect } from "react"
 import { UserManageWrapper } from "./style"
 
 import PageSearch from "@/components/page-search"
-import { searchConfig } from "./config"
+import { searchConfig } from "./search-config"
 import usePageSearch from "@/hooks/usePageSearch"
 
 import PageTable from "@/components/page-table"
@@ -32,7 +32,6 @@ const paginationProps = {
 }
 
 const UserManage = memo(() => {
-	const [showModal, setShowModal] = useState(false)
 	const dispatch = useAppDispatch()
 	const { userList, roleList } = useAppSelector(state => {
 		return {
@@ -41,54 +40,19 @@ const UserManage = memo(() => {
 		}
 	})
 
-	// 搜索按钮的回调
-	// const submitCallback = (value: any) => {
-	// 	dispatch(fetchUserList(value))
-	// }
+	const addCallback = () => {
+		pageModalRef.current.setShowModal(true)
+		pageModalRef.current.setFormData({})
+	}
 
-	// 修改用户信息的回调
-	// const handleUpdateCallback = async (value: any) => {
-	// 	console.log(value)
-	// 	const res = await reqUpdateUserInfo(value, "avatar")
-	// 	if (res.status === 201) {
-	// 		// console.log(res)
-	// 		message.success("修改成功")
-	// 		dispatch(fetchUserList({}))
-	// 	}
-	// }
+	const { PageTableRef, handleSearch, handleReset, handleAdd } = usePageSearch({
+		addCallback,
+	})
 
-	const { handleSearch, handleReset, PageTableRef } = usePageSearch()
+	const { pageModalRef, handleUpdate, defaultInfo } = usePageModal()
 
-	const { handleUpdate } = usePageModal()
+	// const { handleUpdate, pageModalRef } = usePageTable()
 
-	const { tableKey, setTableKey } = usePageTable()
-
-	const data = [
-		{
-			key: "1",
-			firstName: "John",
-			lastName: "Brown",
-			age: 32,
-			address: "New York No. 1 Lake Park",
-			tags: ["nice", "developer"],
-		},
-		{
-			key: "2",
-			firstName: "Jim",
-			lastName: "Green",
-			age: 42,
-			address: "London No. 1 Lake Park",
-			tags: ["loser"],
-		},
-		{
-			key: "3",
-			firstName: "Joe",
-			lastName: "Black",
-			age: 32,
-			address: "Sydney No. 1 Lake Park",
-			tags: ["cool", "teacher"],
-		},
-	]
 	useEffect(() => {
 		dispatch(fetchUserList({}))
 		dispatch(getRoleList())
@@ -103,17 +67,18 @@ const UserManage = memo(() => {
 				resetChange={() => {
 					handleReset()
 				}}
+				addChange={() => handleAdd()}
 			/>
 
 			{/* 表格 */}
 			<PageTable
-				key={tableKey}
 				data={userList}
 				rowKey={(record: any) => record.user_id}
 				pagination={paginationProps}
 				ref={PageTableRef}
 				pageName="user"
 				tableConfig={tableConfig}
+				clickUpdateBtn={(val: any) => handleUpdate(val)}
 			/>
 
 			{/* modal框 */}
@@ -122,6 +87,8 @@ const UserManage = memo(() => {
 				selectData={roleList.map((item: any) => {
 					return { label: item.role, value: item.role_id }
 				})}
+				ref={pageModalRef}
+				defaultInfo={defaultInfo}
 			></PageModal>
 		</UserManageWrapper>
 	)

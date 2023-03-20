@@ -66,7 +66,7 @@ const Container: React.FC = () => {
 						width={240}
 						style={{ height: "100%", overflow: "hidden", minHeight: "100%" }}
 					>
-						<h1 className="logo">easyBlog</h1>
+						<h1 className="logo">DcBlog</h1>
 						<DcMenu
 							changeMenuItem={(e: any) => {
 								changeMenuItem(e)
@@ -126,21 +126,18 @@ const LayoutWrapper = styled.div`
 		font-size: 16px;
 	}
 	.header {
-		display: flex;
-		background-color: red;
-		justify-content: flex-end;
+		background-color: #418fba;
+		img {
+			height: 50px;
+			width: 50px;
+			border-radius: 50%;
+			margin-left: 10px;
+		}
 		.userInfo {
 			color: #1890ff;
 			display: flex;
 			align-items: center;
 			margin-left: 10px;
-			/* width: 50px; */
-			img {
-				width: 50px;
-				width: 50px;
-				border-radius: 50%;
-				margin-left: 10px;
-			}
 		}
 	}
 	.ant-layout-sider-children {

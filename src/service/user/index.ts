@@ -46,9 +46,13 @@ export const reqUpdateUserState = (info: {
 	state: number
 	user_id: string
 }) => {
-	console.log(info)
 	return request.patch<ResType>({
 		url: "/user/update/state",
 		data: { ...info },
 	})
+}
+
+// 删除该用户
+export const reqDeleteUser = (_id: string) => {
+	return request.post({ url: `/user/delete`, data: { _id } })
 }

@@ -1,12 +1,10 @@
-import { useState } from "react"
+import pageModal from "@/components/page-modal"
+import { ElementRef, useRef, useState } from "react"
 
 const usePageTable = () => {
-	const [tableKey, setTableKey] = useState(Date.now)
+	// const handleUpdateState = (checked: boolean) => {}
 
-	return {
-		tableKey,
-		setTableKey,
-	}
+	return {}
 }
 
 export default usePageTable

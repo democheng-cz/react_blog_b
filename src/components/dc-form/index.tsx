@@ -51,9 +51,9 @@ const DcForm: React.FC<FormType> = memo(props => {
 							onChange={e => {
 								handleChange(e, item.name, item.type)
 							}}
-							defaultValue={formData[item.name]}
 							allowClear={true}
 							labelInValue={true}
+							value={{ value: formData[`${item.name}`] }}
 						></Select>
 					</>
 				)
@@ -75,34 +75,6 @@ const DcForm: React.FC<FormType> = memo(props => {
 						</Upload>
 					</>
 				)
-			// case "btns":
-			// 	return (
-			// 		<>
-			// 			{item.btns.map((item: any) => {
-			// 				return (
-			// 					<Button
-			// 						key={item.text}
-			// 						type={item.type}
-			// 						size={item.size}
-			// 						style={{ marginLeft: item.marginLeft }}
-			// 						danger={item.isDanger}
-			// 						onClick={() => {
-			// 							switch (item.text) {
-			// 								case "搜索":
-			// 									handleClick()
-			// 									break
-			// 								case "重置":
-			// 									handleReset()
-			// 									break
-			// 							}
-			// 						}}
-			// 					>
-			// 						{item.text}
-			// 					</Button>
-			// 				)
-			// 			})}
-			// 		</>
-			// 	)
 		}
 	}
 
@@ -111,11 +83,10 @@ const DcForm: React.FC<FormType> = memo(props => {
 		const formData1 = new FormData()
 		formData1.append(type, file.file as RcFile)
 		const res: any = await request.post({
-			url: `/${name}/avatar`,
+			url: `/${name}/image`,
 			data: formData1,
 		})
 		if (res.status === 200) {
-			console.log(type)
 			setFileList([...fileList, file.file])
 			setFormData({ ...formData, [type]: res.result.filepath })
 		}
@@ -150,7 +121,7 @@ const DcForm: React.FC<FormType> = memo(props => {
 					)
 				})}
 				<Form.Item>
-					{Btn.map((item: ReactNode) => {
+					{Btn?.map((item: ReactNode) => {
 						return item
 					})}
 				</Form.Item>

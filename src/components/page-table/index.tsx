@@ -8,18 +8,26 @@ import DcLoadingV2 from "../dc-loading-v2"
 import { useAppDispatch } from "@/store"
 
 import { fetchUserList } from "@/store/feature/user/reducer"
-import { fetchBlogList } from "@/store/feature/blog/reducer"
+import {
+	fetchBlogList,
+	updateCurrentBlogFormData,
+} from "@/store/feature/blog/reducer"
+
+import { reqDeleteBlog } from "@/service/blog"
+import { reqDeleteUser, reqUpdateUserState } from "@/service/user"
 
 import { timeFormat } from "@/utils/timeFormat"
+import { useNavigate } from "react-router-dom"
 
 interface PageTablePropsType {
 	data: any[]
 	rowKey?: string | ((record: any) => string)
 	pagination: any
-	pageName?: string
+	pageName: string
 	tableConfig: any
-	clickUpdateBtn?: () => void
+	clickUpdateBtn?: (val: any) => void
 	clickDeleteBtn?: () => void
+	clickUpdateState?: (checked: boolean) => void
 }
 
 const PageTable = (props: PageTablePropsType, ref: any) => {
@@ -30,8 +38,14 @@ const PageTable = (props: PageTablePropsType, ref: any) => {
 		pagination,
 		tableConfig: { columns },
 		pageName,
+		clickDeleteBtn,
+		clickUpdateBtn,
+		clickUpdateState,
 	} = props
-	let [isLoading, setIsLoading] = useState(false)
+
+	const navigate = useNavigate()
+
+	const [isLoading, setIsLoading] = useState(true)
 
 	//获取表格数据
 	const getDataList = (formData?: any) => {
@@ -46,22 +60,55 @@ const PageTable = (props: PageTablePropsType, ref: any) => {
 	}
 
 	const confirm = async (record: any) => {
-		console.log("first")
-		// const res = await reqDeleteBlog(record.blog_id)
-		// if (res.status === 200) {
-		// 	message.success("删除成功")
-		// }
-		// dispatch(fetchBlogList(null))
+		let res: any = null
+		switch (pageName) {
+			case "blog":
+				res = await reqDeleteBlog(record.blog_id)
+				if (res.status === 200) {
+					message.success("删除成功")
+					dispatch(fetchBlogList({}))
+				}
+				break
+			case "user":
+				res = await reqDeleteUser(record._id)
+				if (res.status === 200) {
+					message.success("删除成功")
+					dispatch(fetchUserList({}))
+				}
+				break
+		}
+	}
+
+	// 修改状态
+	const handleUpdateState = async (checked: boolean, record: any) => {
+		switch (pageName) {
+			case "blog":
+				break
+			case "user":
+				const res = await reqUpdateUserState({
+					state: Number(checked),
+					user_id: record.user_id,
+				})
+				if (res.status === 200) {
+					message.success("修改成功")
+				}
+				break
+		}
+		getDataList()
 	}
 
 	const handleUpdate = (record: any) => {
 		switch (pageName) {
 			case "blog":
+				dispatch(updateCurrentBlogFormData(record))
+				navigate("/blog/edit")
 				break
 			case "user":
+				clickUpdateBtn!(record)
 				break
 		}
 	}
+
 	const renderTableColumn = (title: string, text: any, record: any) => {
 		switch (title) {
 			case "头像":
@@ -81,7 +128,11 @@ const PageTable = (props: PageTablePropsType, ref: any) => {
 			case "文章信息":
 				return (
 					<div style={{ fontSize: "13px", cursor: "pointer" }}>
-						<div>
+						<div
+							onClick={() => {
+								navigate(`/blog/${record.blog_id}`)
+							}}
+						>
 							标题: <span style={{ color: "#0077aa" }}>{record.title}</span>
 						</div>
 						<div>
@@ -113,13 +164,18 @@ const PageTable = (props: PageTablePropsType, ref: any) => {
 			case "状态":
 				return (
 					<>
-						<Switch checked={!!text} />
+						<Switch
+							checked={!!text}
+							onChange={checked => handleUpdateState(checked, record)}
+						/>
 					</>
 				)
 			case "时间":
 				return (
 					<Space style={{ display: "flex", flexDirection: "column" }}>
-						<div>{timeFormat(record["create_time"]) as React.ReactNode}</div>
+						<div className="create_time">
+							{timeFormat(record["create_time"]) as React.ReactNode}
+						</div>
 						<div>{timeFormat(record["update_time"])}</div>
 					</Space>
 				)
@@ -165,9 +221,10 @@ const PageTable = (props: PageTablePropsType, ref: any) => {
 			clearTimeout(timer)
 		}
 	}, [])
+
 	return (
 		<PageTableWrapper>
-			{props.data.length ? (
+			{props.data.length || !isLoading ? (
 				<DcTable
 					dataSource={data}
 					rowKey={rowKey}

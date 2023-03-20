@@ -1,30 +1,33 @@
-import { Select, Input } from "antd"
-
 export const searchConfig = {
-	name: "user",
+	name: "blog",
 	type: "search",
-	hasUpload: true,
+	hasUpload: false,
 	statusOptions: [
 		{
-			label: "启用",
+			label: "已发布",
 			value: 1,
 		},
 		{
-			label: "禁用",
+			label: "未发布",
 			value: 0,
 		},
 	],
-	hasBtns: true,
 	formItems: [
 		{
-			name: "name",
-			label: "昵称",
+			name: "title",
+			label: "标题",
 			width: "25%",
 			type: "input",
 		},
 		{
 			name: "status",
 			label: "状态",
+			width: "25%",
+			type: "select",
+		},
+		{
+			name: "category_id",
+			label: "分类",
 			width: "25%",
 			type: "select",
 		},
@@ -41,6 +44,13 @@ export const searchConfig = {
 			type: "primary",
 			text: "重置",
 			isDanger: true,
+			marginLeft: "20px",
+			size: "small",
+		},
+		{
+			type: "primary",
+			text: "新增",
+			isDanger: false,
 			marginLeft: "20px",
 			size: "small",
 		},

@@ -1,4 +1,4 @@
-import React, { memo, useState, useImperativeHandle } from "react"
+import React, { memo, useState, useImperativeHandle, useEffect } from "react"
 
 import { Modal } from "antd"
 
@@ -13,19 +13,20 @@ import { fetchUserList } from "@/store/feature/user/reducer"
 interface PageModalPropsType {
 	formConfig: any
 	selectData: any[]
+	defaultInfo?: any
 }
 
 const PageModal = (props: PageModalPropsType, ref: any) => {
 	const dispatch = useAppDispatch()
 
-	const { formConfig, selectData } = props
-	let originData = {}
+	const { formConfig, selectData, defaultInfo } = props
+	const originData: any = {}
 
 	const [showModal, setShowModal] = useState(false)
-	const [formData, setFormData] = useState<any>()
+	const [formData, setFormData] = useState<any>({})
 
 	const handleOk = async () => {
-		await reqUpdateUserInfo(formData)
+		await reqUpdateUserInfo({ ...formData, _id: defaultInfo._id })
 		dispatch(fetchUserList({}))
 		setShowModal(false)
 	}
@@ -40,11 +41,20 @@ const PageModal = (props: PageModalPropsType, ref: any) => {
 		() => {
 			return {
 				setShowModal,
+				setFormData,
 			}
 		},
 		[]
 	)
 
+	useEffect(() => {
+		if (defaultInfo) {
+			formConfig.formItems.forEach((item: any) => {
+				originData[item.name] = defaultInfo[item.name]
+			})
+		}
+		setFormData({ ...originData })
+	}, [defaultInfo])
 	return (
 		<PageModalWrapper>
 			<Modal
@@ -65,4 +75,4 @@ const PageModal = (props: PageModalPropsType, ref: any) => {
 		</PageModalWrapper>
 	)
 }
-export default React.forwardRef(PageModal)
+export default memo(React.forwardRef(PageModal))

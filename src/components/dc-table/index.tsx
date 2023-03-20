@@ -1,4 +1,4 @@
-import React, { memo, ReactNode } from "react"
+import React, { memo, ReactNode, useState, useEffect } from "react"
 
 import type { PaginationProps } from "antd/es/pagination"
 import { Table } from "antd"
@@ -16,6 +16,7 @@ interface PageTablePropsType {
 
 const DcTable = memo((props: PageTablePropsType) => {
 	const { rowKey, pagination, dataSource, columns, renderTableColumn } = props
+
 	return (
 		<DcTableWrapper>
 			<Table dataSource={dataSource} rowKey={rowKey} pagination={pagination}>

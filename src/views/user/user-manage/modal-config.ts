@@ -1,7 +1,6 @@
 export const modalConfig = {
 	name: "user",
 	type: "update",
-	hasUpload: true,
 	statusOptions: [
 		{
 			label: "启用",
@@ -12,7 +11,6 @@ export const modalConfig = {
 			value: 0,
 		},
 	],
-	hasBtns: false,
 	formItems: [
 		{
 			name: "nick_name",

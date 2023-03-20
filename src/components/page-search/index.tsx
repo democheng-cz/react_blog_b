@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react"
+import React, { memo, useState, useEffect } from "react"
 
 import { Button } from "antd"
 
@@ -8,28 +8,49 @@ import DcForm from "../dc-form"
 interface PageSearchType {
 	searchChange?: (formData: any) => void
 	resetChange?: () => void
+	submitChange?: (formData: any, type?: string) => void
+	addChange?: () => void
 	formConfig: any
 	selectData?: any[]
+	defaultInfo?: any
 }
-
 const PageSearch: React.FC<PageSearchType> = memo(props => {
-	const { selectData, formConfig, resetChange, searchChange } = props
+	const {
+		selectData,
+		formConfig,
+		resetChange,
+		searchChange,
+		defaultInfo,
+		submitChange,
+		addChange,
+	} = props
 
-	let originData: any = {}
+	const originData: any = {}
 
 	formConfig.formItems.forEach((item: any) => {
 		originData[item.name] = ""
 	})
-
 	const [formData, setFormData] = useState<any>({ ...originData })
 
+	// 搜索按钮的回调
 	const handleSearch = () => {
 		searchChange!(formData)
 	}
 
+	// 重置按钮的回调
 	const handleReset = () => {
 		setFormData({})
 		resetChange!()
+	}
+
+	// 用于提交按钮的回调
+	const handleSubmit = () => {
+		submitChange!(formData)
+	}
+
+	// 新增按钮的回调
+	const handleAdd = () => {
+		addChange!()
 	}
 
 	const renderBtn = () => {
@@ -51,6 +72,11 @@ const PageSearch: React.FC<PageSearchType> = memo(props => {
 								case "重置":
 									handleReset()
 									break
+								case "确定":
+									handleSubmit()
+									break
+								case "新增":
+									handleAdd()
 							}
 						}}
 					>
@@ -60,6 +86,15 @@ const PageSearch: React.FC<PageSearchType> = memo(props => {
 			})
 		)
 	}
+
+	useEffect(() => {
+		if (defaultInfo) {
+			formConfig.formItems.forEach((item: any) => {
+				originData[item.name] = defaultInfo[item.name]
+			})
+		}
+		setFormData({ ...originData })
+	}, [defaultInfo])
 
 	return (
 		<PageSearchWrapper>
