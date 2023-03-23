@@ -56,3 +56,8 @@ export const reqUpdateUserState = (info: {
 export const reqDeleteUser = (_id: string) => {
 	return request.post({ url: `/user/delete`, data: { _id } })
 }
+
+// 创建用户
+export const reqCreateUser = (formData: any) => {
+	return request.post({ url: "/register", data: formData })
+}

@@ -10,7 +10,14 @@ function usePageModal() {
 		setDefaultInfo({ ...val })
 		pageModalRef.current!.setFormData({})
 		pageModalRef.current!.setShowModal(true)
+		pageModalRef.current!.setType("update")
 	}
+
+	// const handleEdit = (val: any) => {
+	// 	setDefaultInfo({ ...val })
+	// 	pageModalRef.current!.setFormData({})
+	// 	pageModalRef.current!.setShowModal(true)
+	// }
 
 	return { pageModalRef, handleUpdate, defaultInfo }
 }

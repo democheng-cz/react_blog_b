@@ -3,6 +3,9 @@ const CracoLessPlugin = require("craco-less")
 
 const CracoAntDesignPlugin = require("craco-antd")
 
+const autoprefixer = require("autoprefixer")
+const tailwindcss = require("tailwindcss")
+
 module.exports = {
 	plugins: [
 		{
@@ -20,18 +23,10 @@ module.exports = {
 			plugin: CracoAntDesignPlugin,
 		},
 	],
-
-	// babel: {
-	// 	plugins: [
-	// 		[
-	// 			"import",
-	// 			{
-	// 				libraryName: "antd",
-	// 				libraryDirectory: "es",
-	// 				style: "true", //设置为true即是less 这里用的是css
-	// 			},
-	// 		],
-	// 	],
+	// style: {
+	postcss: {
+		plugins: [require("autoprefixer"), require("tailwindcss")],
+	},
 	// },
 
 	// 扩展webpack配置

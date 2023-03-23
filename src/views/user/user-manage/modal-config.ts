@@ -13,10 +13,34 @@ export const modalConfig = {
 	],
 	formItems: [
 		{
+			name: "account",
+			label: "账号",
+			width: "80%",
+			type: "input",
+		},
+		{
+			name: "password",
+			label: "密码",
+			width: "80%",
+			type: "input",
+		},
+		{
 			name: "nick_name",
 			label: "昵称",
 			width: "80%",
 			type: "input",
+		},
+		{
+			name: "email",
+			label: "邮箱",
+			width: "80%",
+			type: "input",
+		},
+		{
+			name: "desc",
+			label: "介绍",
+			width: "80%",
+			type: "textArea",
 		},
 		{
 			name: "state",
@@ -29,6 +53,9 @@ export const modalConfig = {
 			label: "角色",
 			width: "80%",
 			type: "select",
+		},
+		{
+			name: "role",
 		},
 		{
 			name: "avatar",

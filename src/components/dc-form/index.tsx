@@ -1,6 +1,6 @@
 import React, { memo, useState, useCallback, useRef, ReactNode } from "react"
 
-import { Form, Input, Select, Button, Upload, message, Image } from "antd"
+import { Form, Input, Select, Button, Upload, Image, Row, Col } from "antd"
 import { UploadOutlined } from "@ant-design/icons"
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface"
 import rehypeSanitize from "rehype-sanitize"
@@ -61,7 +61,7 @@ const DcForm: React.FC<FormType> = memo(props => {
 				return (
 					<>
 						{formData[item.name] ? (
-							<Image width={200} src={formData[item.name]} />
+							<Image width={150} src={formData[item.name]} />
 						) : (
 							""
 						)}
@@ -74,6 +74,13 @@ const DcForm: React.FC<FormType> = memo(props => {
 							<Button icon={<UploadOutlined />}>请选择上传文件</Button>
 						</Upload>
 					</>
+				)
+			case "textArea":
+				return (
+					<Input.TextArea
+						value={formData[item.name]}
+						onChange={e => handleChange(e, item.name, item.type)}
+					/>
 				)
 		}
 	}
@@ -99,10 +106,18 @@ const DcForm: React.FC<FormType> = memo(props => {
 				setFormData!({ ...formData, [prop]: e.target.value })
 				break
 			case "select":
-				setFormData!({ ...formData, [prop]: e.value })
+				if (prop === "role_id") {
+					setFormData!({ ...formData, role: e.label, [prop]: e.value })
+				} else {
+					setFormData!({ ...formData, [prop]: e.value })
+				}
 				break
 			case "md":
 				setFormData({ ...formData, [prop]: e })
+				break
+			case "textArea":
+				setFormData!({ ...formData, [prop]: e.target.value })
+				break
 		}
 	}
 
@@ -120,7 +135,7 @@ const DcForm: React.FC<FormType> = memo(props => {
 						</Form.Item>
 					)
 				})}
-				<Form.Item>
+				<Form.Item style={{ marginLeft: "10%" }}>
 					{Btn?.map((item: ReactNode) => {
 						return item
 					})}

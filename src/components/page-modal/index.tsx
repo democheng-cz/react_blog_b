@@ -1,14 +1,19 @@
 import React, { memo, useState, useImperativeHandle, useEffect } from "react"
 
-import { Modal } from "antd"
+import { message, Modal } from "antd"
 
 import { PageModalWrapper } from "./style"
 
-import { reqUpdateUserInfo, reqUserList } from "@/service/user/index"
+import {
+	reqUpdateUserInfo,
+	reqUserList,
+	reqCreateUser,
+} from "@/service/user/index"
 
 import DcForm from "../dc-form"
-import { useAppDispatch } from "@/store"
+import { useAppDispatch, useAppSelector } from "@/store"
 import { fetchUserList } from "@/store/feature/user/reducer"
+import { createSaveUserInfo } from "@/store/feature/login/actions"
 
 interface PageModalPropsType {
 	formConfig: any
@@ -17,18 +22,37 @@ interface PageModalPropsType {
 }
 
 const PageModal = (props: PageModalPropsType, ref: any) => {
+	const { userInfo } = useAppSelector(state => {
+		return {
+			userInfo: state.login.userInfo,
+		}
+	})
+
 	const dispatch = useAppDispatch()
 
 	const { formConfig, selectData, defaultInfo } = props
 	const originData: any = {}
+	const [type, setType] = useState("update")
 
 	const [showModal, setShowModal] = useState(false)
 	const [formData, setFormData] = useState<any>({})
 
 	const handleOk = async () => {
-		await reqUpdateUserInfo({ ...formData, _id: defaultInfo._id })
-		dispatch(fetchUserList({}))
-		setShowModal(false)
+		let res: any
+		console.log(formData)
+		switch (type) {
+			case "update":
+				res = await reqUpdateUserInfo({ ...formData, _id: defaultInfo._id })
+				break
+			case "add":
+				res = await reqCreateUser({ ...formData })
+		}
+		console.log(res)
+		if (res.status >= 200 && res.status < 300) {
+			message.success(res.message)
+			dispatch(fetchUserList({}))
+			setShowModal(false)
+		}
 	}
 
 	const handleCancel = () => {
@@ -42,6 +66,7 @@ const PageModal = (props: PageModalPropsType, ref: any) => {
 			return {
 				setShowModal,
 				setFormData,
+				setType,
 			}
 		},
 		[]
@@ -59,7 +84,7 @@ const PageModal = (props: PageModalPropsType, ref: any) => {
 		<PageModalWrapper>
 			<Modal
 				open={showModal}
-				onOk={handleOk}
+				onOk={() => handleOk()}
 				onCancel={handleCancel}
 				centered={true}
 				okText="确定"

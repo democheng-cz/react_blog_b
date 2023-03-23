@@ -115,9 +115,6 @@ const mapDispatchToProps = (dispatch: any) => {
 		saveUserInfo: (payload: any) => {
 			dispatch({ type: SAVE_USERINFO, payload })
 		},
-		// getMenuList: (payload: any) => {
-		// 	dispatch(getMenuList())
-		// },
 	}
 }
 

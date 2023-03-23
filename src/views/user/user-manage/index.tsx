@@ -43,6 +43,7 @@ const UserManage = memo(() => {
 	const addCallback = () => {
 		pageModalRef.current.setShowModal(true)
 		pageModalRef.current.setFormData({})
+		pageModalRef.current.setType("add")
 	}
 
 	const { PageTableRef, handleSearch, handleReset, handleAdd } = usePageSearch({
@@ -50,8 +51,6 @@ const UserManage = memo(() => {
 	})
 
 	const { pageModalRef, handleUpdate, defaultInfo } = usePageModal()
-
-	// const { handleUpdate, pageModalRef } = usePageTable()
 
 	useEffect(() => {
 		dispatch(fetchUserList({}))

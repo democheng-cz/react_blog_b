@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState, Suspense } from "react"
 import {} from "@ant-design/icons"
-import { Layout, Menu } from "antd"
+import { Layout, Menu, Col, Row } from "antd"
 import { Outlet, useLocation } from "react-router-dom"
 import styled from "styled-components"
 
@@ -61,10 +61,20 @@ const Container: React.FC = () => {
 		<Auth>
 			<LayoutWrapper>
 				<Layout>
+					{/* <Row
+						style={{ width: "100%" }}
+						// gutter={{ xs: 8, sm: 16, md: 16, lg: 24 }}
+					> */}
+					{/* <Col xs={0} sm={4} style={{ backgroundColor: "#3ba0e9" }}> */}
 					{/* 左侧菜单栏 */}
 					<Sider
-						width={240}
-						style={{ height: "100%", overflow: "hidden", minHeight: "100%" }}
+						collapsedWidth="0"
+						// width={240}
+						style={{
+							height: "100%",
+							overflow: "hidden",
+							minHeight: "100%",
+						}}
 					>
 						<h1 className="logo">DcBlog</h1>
 						<DcMenu
@@ -78,6 +88,15 @@ const Container: React.FC = () => {
 							activeMenu={activeMenu.select || dcCache.getCache("activeMenu")}
 						/>
 					</Sider>
+					{/* </Col> */}
+					{/* <Col
+							xs={24}
+							sm={20}
+							md={20}
+							lg={20}
+							xl={20}
+							style={{ overflow: "auto" }}
+						> */}
 					{/* 右侧内容区 */}
 					<Layout>
 						{/* 头部 */}
@@ -104,6 +123,8 @@ const Container: React.FC = () => {
 							</Content>
 						</Layout>
 					</Layout>
+					{/* </Col>
+					</Row> */}
 				</Layout>
 			</LayoutWrapper>
 		</Auth>
@@ -114,19 +135,22 @@ const LayoutWrapper = styled.div`
 	display: flex;
 	overflow: hidden;
 	height: 100%;
+	width: 100%;
 	.logo {
 		margin: 25px auto;
 		border-radius: 5px;
 		text-align: center;
-		background-color: #008000;
+		background-color: #3ba0e9;
 		color: #fff;
 		line-height: 30px;
 		height: 30px;
 		width: 80%;
 		font-size: 16px;
 	}
+	.layout-main {
+	}
 	.header {
-		background-color: #418fba;
+		background-color: #7dbcea;
 		img {
 			height: 50px;
 			width: 50px;
@@ -140,11 +164,22 @@ const LayoutWrapper = styled.div`
 			margin-left: 10px;
 		}
 	}
+	.Sider {
+		min-width: 0;
+	}
+	.ant-layout-sider {
+		min-width: 0 !important;
+		width: auto !important;
+	}
 	.ant-layout-sider-children {
-		background-color: #a8e3b5;
+		background-color: #3ba0e9;
 	}
 	.ant-menu {
-		background-color: #a8e3b5;
+		background-color: #3ba0e9;
+	}
+	.ant-menu-title-content {
+		color: black;
+		font-weight: 700;
 	}
 `
 

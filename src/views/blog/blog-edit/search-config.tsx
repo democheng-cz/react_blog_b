@@ -38,7 +38,7 @@ export const blogCategoryConfig = {
 			name: "cover",
 			label: "上传封面",
 			type: "upload",
-			width: "20%",
+			width: "40%",
 		},
 		{
 			name: "content",
