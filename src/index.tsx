@@ -8,7 +8,7 @@ import store from "./store"
 
 import "normalize.css"
 import "@/assets/less/reset.less"
-// import "@/assets/tailwindcss/tailwindcss.css"
+import "@/assets/tailwindcss/tailwindcss.css"
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 

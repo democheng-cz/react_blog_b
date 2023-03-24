@@ -123,19 +123,25 @@ const DcForm: React.FC<FormType> = memo(props => {
 
 	return (
 		<DcFormWrapper>
-			<Form style={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
+			<Form
+				style={{ display: "flex", width: "100%", flexWrap: "wrap" }}
+				className="md:flex-col"
+			>
 				{formItems.map((item: any) => {
-					return (
+					return item.label ? (
 						<Form.Item
 							label={item.label}
-							style={{ width: item.width, marginRight: "5px" }}
+							// style={{ width: item.width, marginRight: "5px" }}
 							key={item.name}
+							className="w-1/4 mr-4 md:w-4/5 "
 						>
 							{renderFormItem(item)}
 						</Form.Item>
+					) : (
+						""
 					)
 				})}
-				<Form.Item style={{ marginLeft: "10%" }}>
+				<Form.Item className="lg:ml-40 md:ml-0 ">
 					{Btn?.map((item: ReactNode) => {
 						return item
 					})}

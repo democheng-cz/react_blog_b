@@ -60,7 +60,8 @@ const PageSearch: React.FC<PageSearchType> = memo(props => {
 				return (
 					<Button
 						key={item.text}
-						type={item.type}
+						// type={item.type}
+						type="default"
 						size={item.size}
 						style={{ marginLeft: item.marginLeft }}
 						danger={item.isDanger}

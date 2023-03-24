@@ -47,7 +47,7 @@ const PageModal = (props: PageModalPropsType, ref: any) => {
 			case "add":
 				res = await reqCreateUser({ ...formData })
 		}
-		console.log(res)
+		// console.log(res)
 		if (res.status >= 200 && res.status < 300) {
 			message.success(res.message)
 			dispatch(fetchUserList({}))

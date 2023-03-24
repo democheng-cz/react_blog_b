@@ -38,7 +38,9 @@ export const createSaveMenuList = (payload: any[]) => {
 
 export const getMenuList = (role_id: number) => {
 	return async (dispatch: any, state: any) => {
+		console.log(role_id)
 		const res: any = await reqMenuList(role_id)
+		console.log(res)
 		if (res.status === 200) {
 			dispatch(createSaveMenuList(res.result.data))
 		}

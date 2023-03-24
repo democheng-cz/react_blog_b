@@ -11,7 +11,8 @@ export const reqLogin = (loginInfo: LoginType) => {
 
 // 根据用户角色获取相应的菜单
 export const reqMenuList = (role_id: number) => {
-	return request.get({ url: `/role/menulist/${role_id}` })
+	console.log(role_id)
+	return request.get({ url: `/role/menulist`, params: { role_id } })
 }
 
 // 获取角色列表

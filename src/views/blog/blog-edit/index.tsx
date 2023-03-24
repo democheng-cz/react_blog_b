@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react"
+import React, { memo, useEffect } from "react"
 
 import { message } from "antd"
 import domToImage from "dom-to-image"
@@ -7,8 +7,8 @@ import { BlogCategoryWrapper } from "./style"
 import { useAppDispatch, useAppSelector } from "@/store"
 import dcCache from "@/utils/localstore"
 import PageSearch from "@/components/page-search"
-import { reqUploadBlog, reqUpdateBlog } from "@/service/blog"
 import { blogCategoryConfig } from "./search-config"
+import { reqUploadBlog, reqUpdateBlog } from "@/service/blog"
 import { updateCurrentBlogFormData } from "@/store/feature/blog/reducer"
 import { useNavigate } from "react-router-dom"
 import usePageSearch from "@/hooks/usePageSearch"
@@ -35,6 +35,10 @@ const BlogCategory = memo(() => {
 	})
 
 	const submitCallback = async (value: any) => {
+		if (!value.title) {
+			message.error("请输如内容")
+			return
+		}
 		let res: any = null
 		const length = Object.keys(currentBlogInfo).length
 		try {

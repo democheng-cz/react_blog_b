@@ -29,7 +29,9 @@ const Container: React.FC = () => {
 		return {
 			menuList: state.login.menuList,
 			activeMenu: state.login.activeMenu,
-			userInfo: state.login.userInfo,
+			userInfo: state.login.userInfo.user_id
+				? state.login.userInfo
+				: dcCache.getCache("userInfo"),
 		}
 	})
 
@@ -61,11 +63,6 @@ const Container: React.FC = () => {
 		<Auth>
 			<LayoutWrapper>
 				<Layout>
-					{/* <Row
-						style={{ width: "100%" }}
-						// gutter={{ xs: 8, sm: 16, md: 16, lg: 24 }}
-					> */}
-					{/* <Col xs={0} sm={4} style={{ backgroundColor: "#3ba0e9" }}> */}
 					{/* 左侧菜单栏 */}
 					<Sider
 						collapsedWidth="0"
