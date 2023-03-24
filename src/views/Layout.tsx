@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState, Suspense } from "react"
-import {} from "@ant-design/icons"
-import { Layout, Menu, Col, Row } from "antd"
+import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons"
+import { Layout, Button } from "antd"
 import { Outlet, useLocation } from "react-router-dom"
 import styled from "styled-components"
 
@@ -24,7 +24,7 @@ const Container: React.FC = () => {
 	const dispatch = useAppDispatch()
 
 	const location = useLocation()
-
+	const [collapsed, setCollapsed] = useState(true)
 	const { menuList, activeMenu, userInfo } = useAppSelector(state => {
 		return {
 			menuList: state.login.menuList,
@@ -59,18 +59,17 @@ const Container: React.FC = () => {
 		dispatch(createSaveActiveMenu({ selectKey, openKey: [openKey] }))
 	}, [location])
 
+	const toggleCollapsed = () => {}
 	return (
 		<Auth>
 			<LayoutWrapper>
 				<Layout>
 					{/* 左侧菜单栏 */}
 					<Sider
-						collapsedWidth="0"
-						// width={240}
-						style={{
-							height: "100%",
-							overflow: "hidden",
-							minHeight: "100%",
+						breakpoint="md"
+						collapsed={collapsed}
+						onBreakpoint={broken => {
+							setCollapsed(broken)
 						}}
 					>
 						<h1 className="logo">DcBlog</h1>
@@ -85,19 +84,20 @@ const Container: React.FC = () => {
 							activeMenu={activeMenu.select || dcCache.getCache("activeMenu")}
 						/>
 					</Sider>
-					{/* </Col> */}
-					{/* <Col
-							xs={24}
-							sm={20}
-							md={20}
-							lg={20}
-							xl={20}
-							style={{ overflow: "auto" }}
-						> */}
 					{/* 右侧内容区 */}
 					<Layout>
 						{/* 头部 */}
 						<LayoutHeader />
+						{/* {!collapsed || (
+							<Button
+								type="primary"
+								onClick={toggleCollapsed}
+								style={{ marginBottom: 16 }}
+								className="absolute left-0 top-16"
+							>
+								{collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+							</Button>
+						)} */}
 						<Layout
 							style={{
 								padding: "15px",
